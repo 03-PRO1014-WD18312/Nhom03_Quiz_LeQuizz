@@ -16,6 +16,7 @@
 
     <!-- Custom styles for this template-->
     <link href="../../public/css/sb-admin-2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../public/css/main.css">
 </head>
 
 <body id="page-top">
