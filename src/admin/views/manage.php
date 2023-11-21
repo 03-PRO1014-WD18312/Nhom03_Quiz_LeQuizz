@@ -23,8 +23,8 @@
                             <div class="card-body">
                                 <form method="post" id="updateExamFrm">
                                     <div class="form-group">
-                                        <label>Course</label>
-                                        <select class="form-control" name="courseId" required="">
+                                        <label>Subjects</label>
+                                        <select class="form-control" name="subjectId" required="">
                                         </select>
                                     </div>
 
@@ -41,7 +41,7 @@
 
                                     <div class="form-group">
                                         <label>Exam Time limit</label>
-                                        <select class="form-control" name="examLimit" required="">
+                                        <select class="form-control" name="examTimeLimit" required="">
                                             <option value=""> Minutes</option>
                                             <option value="10">10 Minutes</option>
                                             <option value="20">20 Minutes</option>
@@ -54,7 +54,7 @@
 
                                     <div class="form-group">
                                         <label>Display limit</label>
-                                        <input type="number" name="examQuestDipLimit" class="form-control" value="">
+                                        <input type="number" name="examLimitQuest" class="form-control" value="">
                                     </div>
 
                                     <div class="form-group" align="right">
@@ -68,11 +68,13 @@
                     <div class="col-md-6">
 
                         <div class="main-card mb-3 card">
-                            <div class="card-header"><i class="header-icon lnr-license icon-gradient bg-plum-plate"> </i>Exam Question's
+                            <div class="card-header"><i class="header-icon lnr-license icon-gradient bg-plum-plate">
+                                </i>Exam Question's
                                 <span class="badge badge-pill badge-primary ml-2">
                                 </span>
                                 <div class="btn-actions-pane-right">
-                                    <button class="btn btn-sm btn-primary " data-toggle="modal" data-target="#modalForAddQuestion">Add Question</button>
+                                    <button class="btn btn-sm btn-primary " data-toggle="modal"
+                                        data-target="#modalForAddQuestion">Add Question</button>
                                 </div>
                             </div>
                             <div class="card-body">
