@@ -1,4 +1,4 @@
-<div class="app-main__outer">
+<div class="app-main__outer col-10">
     <div class="app-main__inner">
         <div class="app-page-title">
             <div class="page-title-wrapper">
@@ -21,14 +21,13 @@
                                         <input type="text" name="nameSubject" class="form-control">
                                     </div>
                                     <div class="form-group" align="right">
-                                        <input type="submit" class="btn btn-primary btn-lg" name="addSubject"
-                                            value="Add Subject">
+                                        <input type="submit" class="btn btn-primary btn-lg" name="addSubject" value="Add Subject">
                                     </div>
                                     <div>
                                         <?php
-                                             if (isset($notification) && ($notification != "")) {
-                                                echo $notification;
-                                            }
+                                        if (isset($notification) && ($notification != "")) {
+                                            echo $notification;
+                                        }
                                         ?>
                                     </div>
                                 </form>
@@ -40,5 +39,4 @@
                 </div>
             </div>
         </div>
-
     </div>
