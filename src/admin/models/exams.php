@@ -10,7 +10,8 @@
     // LIST ALL EXAMS
     function listExams() {
         $sql = "SELECT * FROM exams ORDER BY id_exam DESC";
-        pdo_query($sql);
+        $listExam = pdo_query($sql);
+        return $listExam;
     }
 
     // DELETE EXAMS

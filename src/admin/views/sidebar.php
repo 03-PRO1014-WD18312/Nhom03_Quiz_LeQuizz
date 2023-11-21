@@ -36,7 +36,7 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="index.php?act=addSubjects">Add Subjects</a>
-                <a class="collapse-item" href="cards.html">Manage Subjects</a>
+                <a class="collapse-item" href="index.php?act=manageSubjects">Manage Subjects</a>
             </div>
         </div>
     </li>
@@ -50,36 +50,36 @@
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="utilities-color.html">Add Exams</a>
-                <a class="collapse-item" href="utilities-border.html">Manage Exams</a>
+                <a class="collapse-item" href="index.php?act=addExams">Add Exams</a>
+                <a class="collapse-item" href="index.php?act=manageExams">Manage Exams</a>
             </div>
         </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Examinees</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Subjects</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="utilities-color.html">Add Examinees</a>
-                <a class="collapse-item" href="utilities-border.html">Manage Examinees</a>
+                <a class="collapse-item" href="">Add Examinees</a>
+                <a class="collapse-item" href="">Manage Examinees</a>
             </div>
         </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Blogers</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Subjects</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="utilities-color.html">Add Blogers</a>
-                <a class="collapse-item" href="utilities-border.html">Manage Blogers/a>
+                <a class="collapse-item" href="">Add Blogs</a>
+                <a class="collapse-item" href="">Manage Blogs</a>
             </div>
         </div>
     </li>
