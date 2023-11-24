@@ -6,6 +6,7 @@ include '../../config/db.php';
 include '../models/subjects.php';
 include '../models/exams.php';
 include '../models/examinees.php';
+include '../models/questions.php';
 
 
 if (isset($_GET['act'])) {
@@ -81,8 +82,36 @@ if (isset($_GET['act'])) {
 
             // LIST ALL EXAMS
         case 'manageExams':
-
+            $listSubject = listSubject();
             $listExam = listExams();
+
+            include 'pages/exams/manageExams.php';
+            break;
+
+            //UPDATE EXAMS
+        case 'updateOneExam':
+            if (isset($_GET['id_exam']) && ($_GET['id_exam'] > 0)) {
+                $loadOne = loadOneExam($_GET['id_exam']);
+            }
+            $listSubject = listSubject();
+            include 'pages/exams/updateExams.php';
+            break;
+
+        case 'updateExams':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (isset($_POST['updateExam'])) {
+                    $idExam = $_POST['idExam'];
+                    $examTitle = $_POST['examTitle'];
+                    $examDesc = $_POST['examDesc'];
+                    $examTimeLimit = $_POST['examTimeLimit'];
+                    $examLimitQuest = $_POST['examLimitQuest'];
+                    $idSubject = $_POST['subjectId'];
+                    updateExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idExam, $idSubject);
+                    $notification = "Success!";
+                }
+            }
+            $listExam = listExams();
+            $listSubject = listSubject();
             include 'pages/exams/manageExams.php';
             break;
 
