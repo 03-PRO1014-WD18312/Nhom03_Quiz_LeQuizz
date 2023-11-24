@@ -22,17 +22,16 @@
 
     // LOAD 1 EXAM
     function loadOneExam($idExam) {
-        $sql = "SELECT FROM exams WHERE id_exam =".$idExam;
+        $sql = "SELECT * FROM exams WHERE id_exam =".$idExam;
         $exam = pdo_query_one($sql);
         return $exam;
     }
 
     // UPDATE EXAMS
-    function updateExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idExam) {
+    function updateExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idExam, $idSubject) {
         $sql = "UPDATE exams SET exam_title = '".$examTitle."', exam_time_limit = '".$examTimeLimit."', 
-        exam_limit_quest = '".$examLimitQuest."', exam_description = '".$examDesc."' 
+        exam_limit_quest = '".$examLimitQuest."', exam_description = '".$examDesc."', id_subject = '".$idSubject."' 
         WHERE id_exam =".$idExam;
-        
         pdo_query($sql);
     }
 ?>

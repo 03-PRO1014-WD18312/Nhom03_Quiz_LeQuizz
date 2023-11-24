@@ -29,7 +29,8 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Subjects</span>
             </a>
@@ -43,11 +44,13 @@
 
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseUtilities"
+                aria-expanded="true" aria-controls="collapseUtilities">
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Exams</span>
             </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="index.php?act=addExams">Add Exams</a>
                     <a class="collapse-item" href="index.php?act=manageExams">Manage Exams</a>
@@ -56,7 +59,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseThree"
+                aria-expanded="true" aria-controls="collapseThree">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Examinees</span>
             </a>
@@ -69,7 +73,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+            <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseFour"
+                aria-expanded="true" aria-controls="collapseFour">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Blogs</span>
             </a>
@@ -89,7 +94,8 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
                 <span>Blogs</span>
             </a>
