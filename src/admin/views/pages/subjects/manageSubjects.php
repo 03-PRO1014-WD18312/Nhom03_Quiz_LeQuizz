@@ -1,4 +1,4 @@
-<div class="app-main__outer">
+<div class="app-main__outer col-10">
     <div class="app-main__inner">
         <div class="app-page-title">
             <div class="page-title-wrapper">
@@ -21,23 +21,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                                foreach ($listSubject as $subject) {
-                                    extract($subject);
-                                    $updateOneSubject = "index.php?act=updateOneSubject&id_subject=".$id_subject;
-                                    $deleteSubjects = "index.php?act=deleteSubjects&id_subject=".$id_subject;
+                            <?php
+                            foreach ($listSubject as $subject) {
+                                extract($subject);
+                                $updateOneSubject = "index.php?act=updateOneSubject&id_subject=" . $id_subject;
+                                $deleteSubjects = "index.php?act=deleteSubjects&id_subject=" . $id_subject;
 
-                                    echo '<tr>
-                                        <td class="text-left pl-4">'.$id_subject.'</td>
-                                        <td class="text-center">'.$name_subject.'</td>
+                                echo '<tr>
+                                        <td class="text-left pl-4">' . $id_subject . '</td>
+                                        <td class="text-center">' . $name_subject . '</td>
                                         <td class="text-right pl-4">
-                                            <a href="'.$updateOneSubject.'"><input type="button" value="UPDATE"></a>
-                                            <a href="'.$deleteSubjects.'"><input type="button" value="DELETE"></a>
+                                            <a href="' . $updateOneSubject . '"><input type="button" value="UPDATE"></a>
+                                            <a href="' . $deleteSubjects . '"><input type="button" value="DELETE"></a>
                                         </td>
                                     </tr>';
-                                }
-                                
-                            
+                            }
+
+
                             ?>
 
                         </tbody>

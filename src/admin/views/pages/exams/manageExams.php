@@ -29,8 +29,8 @@
                                     extract($exam);
                                     $updateOneExam = "index.php?act=updateOneExam&id_exam=".$id_exam;
                                     $deleteExams = "index.php?act=deleteExams&id_exam=".$id_exam;
-
-                                    echo '<tr>
+                                        
+                                        echo '<tr>
                                         <td class="text-left pl-4">'.$id_exam.'</td>
                                         <td class="text-left pl-4">'.$exam_title.'</td>
                                         <td class="text-left pl-4">'.$exam_description.'</td>
@@ -38,8 +38,8 @@
                                         <td class="text-left pl-4">'.$exam_limit_quest.'</td>
                                         <td class="text-left pl-4"><a href="'.$updateOneExam.'"><input type="button" value="UPDATE"></a>
                                         <a href="'.$deleteExams.'"><input type="button" value="DELETE"></a></td>
-                                    <tr>';
-                                }
+                                        <tr>';
+                                    }
                             ?>
                         </tbody>
                     </table>
