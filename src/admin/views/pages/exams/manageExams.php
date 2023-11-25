@@ -21,25 +21,34 @@
                                 <th class="text-left pl-4">EXAMS DESCRIPTION</th>
                                 <th class="text-left pl-4">EXAMS TIME LIMIT</th>
                                 <th class="text-left pl-4">EXAMS QUESTS LIMIT</th>
+                                <th class="text-left pl-4">NAME SUBJECT</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                                foreach ($listExam as $exam) {
-                                    extract($exam);
-                                    $updateOneExam = "index.php?act=updateOneExam&id_exam=".$id_exam;
-                                    $deleteExams = "index.php?act=deleteExams&id_exam=".$id_exam;
-                                        
-                                        echo '<tr>
-                                        <td class="text-left pl-4">'.$id_exam.'</td>
-                                        <td class="text-left pl-4">'.$exam_title.'</td>
-                                        <td class="text-left pl-4">'.$exam_description.'</td>
-                                        <td class="text-left pl-4">'.$exam_time_limit.'</td>
-                                        <td class="text-left pl-4">'.$exam_limit_quest.'</td>
-                                        <td class="text-left pl-4"><a href="'.$updateOneExam.'"><input type="button" value="UPDATE"></a>
-                                        <a href="'.$deleteExams.'"><input type="button" value="DELETE"></a></td>
-                                        <tr>';
+                            <?php
+                            foreach ($listExam as $exam) {
+                                extract($exam);
+                                $updateOneExam = "index.php?act=updateOneExam&id_exam=" . $id_exam;
+                                $deleteExams = "index.php?act=deleteExams&id_exam=" . $id_exam;
+
+                                echo '<tr>
+                                        <td class="text-left pl-4">' . $id_exam . '</td>
+                                        <td class="text-left pl-4">' . $exam_title . '</td>
+                                        <td class="text-left pl-4">' . $exam_description . '</td>
+                                        <td class="text-left pl-4">' . $exam_time_limit . '</td>
+                                        <td class="text-left pl-4">' . $exam_limit_quest . '</td>';
+
+                                foreach ($listSubject as $subject) {
+                                    extract($subject);
+                                    if ($exam['id_subject'] == $id_subject) {
+                                        echo '<td class="text-left pl-4">' . $name_subject . '</td>';
                                     }
+                                }
+
+                                echo '<td class="text-left pl-4"><a href="' . $updateOneExam . '"><input type="button" value="UPDATE"></a>
+                                        <a href="' . $deleteExams . '"><input type="button" value="DELETE"></a></td>
+                                        <tr>';
+                            }
                             ?>
                         </tbody>
                     </table>

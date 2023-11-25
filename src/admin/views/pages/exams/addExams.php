@@ -12,10 +12,10 @@
                                 <label>Subjects</label>
                                 <select class="form-control" name="subjectId" required="">
                                     <?php
-                                        foreach ($listSubject as $subject) {
-                                            extract($subject);
-                                            echo '<option value="'.$id_subject.'">'.$name_subject.'';
-                                        }
+                                    foreach ($listSubject as $subject) {
+                                        extract($subject);
+                                        echo '<option value="' . $id_subject . '">' . $name_subject . '';
+                                    }
                                     ?>
                                 </select>
                             </div>
