@@ -92,6 +92,7 @@ if (isset($_GET['act'])) {
         case 'updateOneExam':
             if (isset($_GET['id_exam']) && ($_GET['id_exam'] > 0)) {
                 $loadOne = loadOneExam($_GET['id_exam']);
+                $listQuestion = listQuestions($_GET['id_exam']);
             }
             $listSubject = listSubject();
             include 'pages/exams/updateExams.php';
@@ -133,3 +134,4 @@ if (isset($_GET['act'])) {
 }
 
 include 'footer.php';
+?>
