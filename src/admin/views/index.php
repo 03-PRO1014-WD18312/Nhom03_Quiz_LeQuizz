@@ -82,8 +82,18 @@ if (isset($_GET['act'])) {
 
             // LIST ALL EXAMS
         case 'manageExams':
+            
+                if (isset($_POST['listChecked'])) {
+                    $key = $_POST['key'];
+                    $search = $_POST['search'];
+                }
+                else {
+                    $key = "";
+                    $search = 0;
+                }
+            
             $listSubject = listSubject();
-            $listExam = listExams();
+            $listExam = listExams($key, $search);
 
             include 'pages/exams/manageExams.php';
             break;
@@ -111,19 +121,24 @@ if (isset($_GET['act'])) {
                     $notification = "Success!";
                 }
             }
-            $listExam = listExams();
+            $listExam = listExams("", 0);
             $listSubject = listSubject();
             include 'pages/exams/manageExams.php';
             break;
 
-            // ADD EXAMINEES
-        case 'addExaminees':
-
+        
+            // LIST QUESTIONS IN EXAMS
+        case 'manageQuestion':
+            if (isset($_GET['id_exam']) && ($_GET['id_exam'] > 0)) {
+                $listAllQuest = listQuestions($_GET['id_exam']);
+            }
+            include 'pages/questions/manageQuestion.php';
             break;
+
 
             // LIST ALL EXAMINEES      
         case 'manageExaminees':
-
+            include 'pages/examinees/manageExaminees.php';
             break;
 
         default:
