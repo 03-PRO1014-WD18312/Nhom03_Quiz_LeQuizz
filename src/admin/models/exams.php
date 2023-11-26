@@ -8,8 +8,15 @@
     }
 
     // LIST ALL EXAMS
-    function listExams() {
-        $sql = "SELECT * FROM exams ORDER BY id_exam DESC";
+    function listExams($key, $search) {
+        $sql = "SELECT * FROM exams WHERE 1";
+        if ($key != "") {
+            $sql .= " AND exam_title LIKE '%".$key."%'";
+        }
+        if ($search > 0) {
+            $sql .= " AND id_subject = '".$search."'";
+        }
+        $sql .= " ORDER BY id_exam DESC";
         $listExam = pdo_query($sql);
         return $listExam;
     }
@@ -34,4 +41,5 @@
         WHERE id_exam =".$idExam;
         pdo_query($sql);
     }
+
 ?>

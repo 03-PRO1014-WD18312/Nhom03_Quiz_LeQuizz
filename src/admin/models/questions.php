@@ -3,9 +3,10 @@
     // ADD QUESTIONS
     function addQuestions($titleQuestion, $choice1, $choice2, $choice3, $choice4, $correctAnswer, $idExam) {
         $sql = "INSERT INTO questions(title_question, choice1_question, choice2_question, choice3_question, choice4_question, correct_answer, id_exam) 
-        VALUES ('$titleQuestion' , '$choice1', '$choice2', '$choice3', '$choice4', '$correctAnswer', '$idExam')";
+        VALUES ('$titleQuestion' , '$choice1', '$choice2', '$choice3', '$choice4', '$correctAnswer') WHERE id_exam =".$idExam;
         pdo_execute($sql);
     }
+
 
     // LOAD 1 QUESTION
     function loadOneQuesion($idQuestion) {

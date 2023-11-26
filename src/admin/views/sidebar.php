@@ -66,8 +66,7 @@
             </a>
             <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="">Add Examinees</a>
-                    <a class="collapse-item" href="">Manage Examinees</a>
+                    <a class="collapse-item" href="index.php?act=manageExaminees">Manage Examinees</a>
                 </div>
             </div>
         </li>

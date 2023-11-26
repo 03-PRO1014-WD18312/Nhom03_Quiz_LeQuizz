@@ -8,6 +8,20 @@
             </div>
         </div>
 
+        <form action="index.php?act=manageExams" method="post">
+            <input type="text" name="key">
+            <select name="search">
+                <option value="0" selected>ALL SUBJECTS</option>
+                <?php
+                    foreach ($listSubject as $subject) {
+                    extract($subject);
+                    echo '<option value="'.$id_subject.'">'.$name_subject.'</option>';      
+                }
+                ?>
+            </select>
+            <input type="submit" name="listChecked" value="GO">
+        </form>
+
         <div class="col-md-12">
             <div class="main-card mb-3 card">
                 <div class="card-header">Exams List
