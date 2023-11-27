@@ -103,12 +103,16 @@ if (isset($_GET['act'])) {
             break;
 
         default:
+            $listSubject = listSubject();
             include 'sidebar.php';
+            include 'home.php';
             // include 'main.php';
             break;
     }
 } else {
+    $listSubject = listSubject();
     include 'sidebar.php';
+    include 'home.php';
     // include 'main.php';
 }
 

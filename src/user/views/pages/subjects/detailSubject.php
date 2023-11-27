@@ -24,10 +24,11 @@
         ?>
     </div>
 
-    <div class="row"></div>
-    <div class="col-12">
-        <a href="index.php?act=registSubject" class="btn btn-primary">Quay lại</a>
-        <a href="index.php?act=registerSubject&id=<?php echo $loadOneSubject['id_subject']; ?>" class="btn btn-primary">Đăng ký môn học</a>
+    <div class="row">
+        <div class="col-12 mt-3">
+            <a href="index.php" class="btn btn-primary">Trang chủ</a>
+            <a href="index.php?act=registSubject" class="btn btn-primary">Quay lại</a>
+            <a href="index.php?act=registerSubject&id=<?php echo $loadOneSubject['id_subject']; ?>" class="btn btn-primary">Đăng ký môn học</a>
+        </div>
     </div>
-</div>
 </div>
