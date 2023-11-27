@@ -11,7 +11,7 @@
         <div class="card-body">
         <h5 class="card-title">' . $name_subject . '</h5>
         <p class="card-text"></p>
-        <a href="index.php?act=detailSubject?id=' . $id_subject . '" class="btn btn-primary">Xem chi tiết</a>
+        <a href="index.php?act=detailSubject&id=' . $id_subject . '" class="btn btn-primary">Xem chi tiết</a>
         </div>
         </div>';
     }

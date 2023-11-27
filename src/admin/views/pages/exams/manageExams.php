@@ -13,9 +13,9 @@
             <select name="search">
                 <option value="0" selected>ALL SUBJECTS</option>
                 <?php
-                    foreach ($listSubject as $subject) {
+                foreach ($listSubject as $subject) {
                     extract($subject);
-                    echo '<option value="'.$id_subject.'">'.$name_subject.'</option>';      
+                    echo '<option value="' . $id_subject . '">' . $name_subject . '</option>';
                 }
                 ?>
             </select>
@@ -59,8 +59,8 @@
                                     }
                                 }
 
-                                echo '<td class="text-left pl-4"><a href="' . $updateOneExam . '"><input type="button" value="UPDATE"></a>
-                                        <a href="' . $deleteExams . '"><input type="button" value="DELETE"></a></td>
+                                echo '<td class="text-left pl-4"><a href="' . $updateOneExam . '" class="btn btn-sm btn-primary">UPDATE</a>
+                                        <a href="' . $deleteExams . '" class="btn btn-sm btn-danger">DELETE</a></td>
                                         <tr>';
                             }
                             ?>

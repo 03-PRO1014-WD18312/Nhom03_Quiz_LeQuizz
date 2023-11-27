@@ -1,45 +1,56 @@
 <?php
 
-    // ADD EXAMS
-    function addExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idSubject) {
-        $sql = "INSERT INTO exams(exam_title, exam_time_limit, exam_limit_quest, exam_description, id_subject) 
+// ADD EXAMS
+function addExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idSubject)
+{
+    $sql = "INSERT INTO exams(exam_title, exam_time_limit, exam_limit_quest, exam_description, id_subject) 
         VALUES ('$examTitle', '$examTimeLimit', '$examLimitQuest', '$examDesc', '$idSubject')";
-        pdo_execute($sql);
-    }
+    pdo_execute($sql);
+}
 
-    // LIST ALL EXAMS
-    function listExams($key, $search) {
-        $sql = "SELECT * FROM exams WHERE 1";
-        if ($key != "") {
-            $sql .= " AND exam_title LIKE '%".$key."%'";
-        }
-        if ($search > 0) {
-            $sql .= " AND id_subject = '".$search."'";
-        }
-        $sql .= " ORDER BY id_exam DESC";
-        $listExam = pdo_query($sql);
-        return $listExam;
+// LIST ALL EXAMS
+function listExams($key, $search)
+{
+    $sql = "SELECT * FROM exams WHERE 1";
+    if ($key != "") {
+        $sql .= " AND exam_title LIKE '%" . $key . "%'";
     }
-
-    // DELETE EXAMS
-    function deleteExams($idExam) {
-        $sql = "DELETE FROM exams WHERE id_exam =".$idExam;
-        pdo_execute($sql);
+    if ($search > 0) {
+        $sql .= " AND id_subject = '" . $search . "'";
     }
+    $sql .= " ORDER BY id_exam DESC";
+    $listExam = pdo_query($sql);
+    return $listExam;
+}
 
-    // LOAD 1 EXAM
-    function loadOneExam($idExam) {
-        $sql = "SELECT * FROM exams WHERE id_exam =".$idExam;
-        $exam = pdo_query_one($sql);
-        return $exam;
-    }
+// LIST EXAMS BY SUBJECT
+function listExamsBySubject($idSubject)
+{
+    $sql = "SELECT * FROM exams WHERE id_subject =" . $idSubject;
+    $listExam = pdo_query($sql);
+    return $listExam;
+}
 
-    // UPDATE EXAMS
-    function updateExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idExam, $idSubject) {
-        $sql = "UPDATE exams SET exam_title = '".$examTitle."', exam_time_limit = '".$examTimeLimit."', 
-        exam_limit_quest = '".$examLimitQuest."', exam_description = '".$examDesc."', id_subject = '".$idSubject."' 
-        WHERE id_exam =".$idExam;
-        pdo_query($sql);
-    }
+// DELETE EXAMS
+function deleteExams($idExam)
+{
+    $sql = "DELETE FROM exams WHERE id_exam =" . $idExam;
+    pdo_execute($sql);
+}
 
-?>
+// LOAD 1 EXAM
+function loadOneExam($idExam)
+{
+    $sql = "SELECT * FROM exams WHERE id_exam =" . $idExam;
+    $exam = pdo_query_one($sql);
+    return $exam;
+}
+
+// UPDATE EXAMS
+function updateExams($examTitle, $examTimeLimit, $examLimitQuest, $examDesc, $idExam, $idSubject)
+{
+    $sql = "UPDATE exams SET exam_title = '" . $examTitle . "', exam_time_limit = '" . $examTimeLimit . "', 
+        exam_limit_quest = '" . $examLimitQuest . "', exam_description = '" . $examDesc . "', id_subject = '" . $idSubject . "' 
+        WHERE id_exam =" . $idExam;
+    pdo_query($sql);
+}

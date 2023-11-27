@@ -3,6 +3,7 @@
 session_start();
 include '../../config/db.php';
 include '../../admin/models/subjects.php';
+include '../../admin/models/exams.php';
 include '../../admin/models/examinees.php';
 
 include 'header.php';
@@ -40,6 +41,45 @@ if (isset($_GET['act'])) {
             include 'forgotPassword.php';
             break;
 
+        case 'logout':
+            unset($_SESSION['user']);
+            echo "<script>window.location.href='index.php';</script>";
+            // header('Location: index.php');
+            break;
+
+        case 'detailSubject':
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $loadOneSubject = loadOneSubject($id);
+                $listExamsBySubject = listExamsBySubject($id);
+
+                include './pages/subjects/detailSubject.php';
+            } else {
+                echo "<script>window.location.href='index.php';</script>";
+                // header('Location: index.php');
+            }
+
+            break;
+
+        case 'registerSubject':
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+
+                $notice = "Đăng ký môn học thành công!";
+
+                $loadOneSubject = loadOneSubject($id);
+                $listExamsBySubject = listExamsBySubject($id);
+
+                echo "<script>alert('" . $notice . "');</script>";
+                echo "<script>window.location.href='index.php?act=detailSubject&id=" . $id . "';</script>";
+            } else {
+                echo "<script>window.location.href='index.php';</script>";
+                // header('Location: index.php');
+            }
+
+            break;
+
+
         case 'registSubject':
             $listSubject = listSubject();
 
@@ -47,18 +87,17 @@ if (isset($_GET['act'])) {
             break;
 
         case 'listExams':
-                if (isset($_POST['listChecked'])) {
-                    $key = $_POST['key'];
-                    $search = $_POST['search'];
-                }
-                else {
-                    $key = "";
-                    $search = 0;
-                }
-            
+            if (isset($_POST['listChecked'])) {
+                $key = $_POST['key'];
+                $search = $_POST['search'];
+            } else {
+                $key = "";
+                $search = 0;
+            }
+
             $listSubject = listSubject();
             $listExam = listExams($key, $search);
-            
+
             include 'sidebar.php';
             include './pages/exams/listExams.php';
             break;
