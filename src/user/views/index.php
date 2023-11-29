@@ -98,20 +98,19 @@ if (isset($_GET['act'])) {
             $listSubject = listSubject();
             $listExam = listExams($key, $search);
 
-            include 'sidebar.php';
             include './pages/exams/listExams.php';
             break;
 
         default:
             $listSubject = listSubject();
-            include 'sidebar.php';
+            include 'content.php';
             include 'home.php';
             // include 'main.php';
             break;
     }
 } else {
     $listSubject = listSubject();
-    include 'sidebar.php';
+    include 'content.php';
     include 'home.php';
     // include 'main.php';
 }

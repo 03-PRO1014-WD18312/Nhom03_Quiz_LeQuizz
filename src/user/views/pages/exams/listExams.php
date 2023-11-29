@@ -1,26 +1,27 @@
 <div class="app-main__outer">
     <div class="app-main__inner">
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div>LIST EXAMS</div>
-                </div>
+        <div class="d-flex justify-content-center my-3">
+            <div class="col-md-8">
+                <h3 class="">Danh sách môn học</h3>
+            </div>
+
+            <div class="col-md-4">
+                <form action="index.php?act=listExams" method="post" class="d-flex">
+                    <select class="form-select form-select-sm mr-3" aria-label="Default select example" name="search">
+                        <option value="0" selected>All Subject</option>
+                        <?php
+                        foreach ($listSubject as $subject) {
+                            extract($subject);
+                            echo '<option value="' . $id_subject . '">' . $name_subject . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <input class="form-control mr-3" type="text" placeholder="Search" name="key">
+                    <input class="btn btn-outline-success" type="submit" name="listChecked" value="Search">
+                </form>
             </div>
         </div>
 
-        <form action="index.php?act=listExams" method="post">
-            <input type="text" name="key">
-            <select name="search">
-                <option value="0" selected>ALL SUBJECTS</option>
-                <?php
-                    foreach ($listSubject as $subject) {
-                    extract($subject);
-                    echo '<option value="'.$id_subject.'">'.$name_subject.'</option>';      
-                }
-                ?>
-            </select>
-            <input type="submit" name="listChecked" value="GO">
-        </form>
 
         <div class="col-md-12">
             <div class="main-card mb-3 card">
