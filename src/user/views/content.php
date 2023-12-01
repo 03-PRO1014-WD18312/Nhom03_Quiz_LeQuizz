@@ -31,7 +31,7 @@
                                 Exams
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="index.php?act=registExams">Regist Exams</a></li>
+                                <li><a class="dropdown-item" href="#">Regist Exams</a></li>
                                 <li><a class="dropdown-item" href="index.php?act=listExams">Manage Exams</a></li>
                             </ul>
                         </li>

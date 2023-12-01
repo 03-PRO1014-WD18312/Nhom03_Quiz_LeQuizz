@@ -53,6 +53,7 @@ if (isset($_GET['act'])) {
                 $loadOneSubject = loadOneSubject($id);
                 $listExamsBySubject = listExamsBySubject($id);
 
+                include 'content.php';
                 include './pages/subjects/detailSubject.php';
             } else {
                 echo "<script>window.location.href='index.php';</script>";
@@ -83,6 +84,7 @@ if (isset($_GET['act'])) {
         case 'registSubject':
             $listSubject = listSubject();
 
+            include 'content.php';
             include './pages/subjects/registSubject.php';
             break;
 
@@ -98,6 +100,7 @@ if (isset($_GET['act'])) {
             $listSubject = listSubject();
             $listExam = listExams($key, $search);
 
+            include 'content.php';
             include './pages/exams/listExams.php';
             break;
 
