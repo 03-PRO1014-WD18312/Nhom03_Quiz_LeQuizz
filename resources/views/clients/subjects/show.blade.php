@@ -57,7 +57,7 @@
                                                 class="btn btn-primary">Do
                                                 test</a>
                                         @else
-                                            <button type="button" class="btn btn-primary btn-custom">Do
+                                            <button type="button" class="btn btn-secondary btn-custom">Do
                                                 test</button>
 
                                             <span class="small badge text-bg-danger" style="visibility: hidden">You need to
@@ -78,7 +78,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         document.querySelectorAll('.btn-custom').forEach(function(button) {
             button.addEventListener('click', function() {
@@ -89,4 +89,4 @@
             });
         });
     </script>
-@endsection
+@endpush

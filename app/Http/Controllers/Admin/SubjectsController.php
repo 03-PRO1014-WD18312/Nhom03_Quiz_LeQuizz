@@ -117,7 +117,7 @@ class SubjectsController extends Controller
             $file->storeAs('public', $fileName);
             $data['img'] = $fileName;
         } else {
-            $data['img'] = $getSubject[0]->img_subject;
+            $data['img'] = $getSubject[0]->image;
         }
 
         if ($this->subjects->updateSubject($data, $id)) {

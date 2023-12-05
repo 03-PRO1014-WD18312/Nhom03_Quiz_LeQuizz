@@ -42,7 +42,16 @@ class QuestionsController extends Controller
 
         $listQuestions = $this->questions->getAllQuestions();
 
-        return view('clients.questions.show', compact('getExam', 'listQuestions'));
+        foreach ($getExam as $exam) {
+            $timeLimit = $exam->time_limit;
+            foreach ($listQuestions as $question) {
+                if ($exam->id == $question->exam_id) {
+                    $countdown = $timeLimit * 60;
+                }
+            }
+        }
+
+        return view('clients.questions.show', compact('getExam', 'listQuestions', 'countdown'));
     }
 
     public function completeExam(Request $request, string $examId, string $userId)

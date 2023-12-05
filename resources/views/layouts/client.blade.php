@@ -20,7 +20,7 @@
 
     <script src="{{ asset('assets/clients/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/clients/js/custom.js') }}"></script>
-    @yield('script')
+    @stack('script')
 </body>
 
 </html>
