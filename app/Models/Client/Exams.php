@@ -20,7 +20,7 @@ class Exams extends Model
 
     public function getExamById(string $id)
     {
-        $exam = DB::select('SELECT * FROM exams WHERE id_exam = ?', [$id]);
+        $exam = DB::select('SELECT * FROM exams WHERE id = ?', [$id]);
 
         return $exam;
     }

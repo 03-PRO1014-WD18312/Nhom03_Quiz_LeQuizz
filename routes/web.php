@@ -2,10 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Middleware\CheckRole;
-
-use App\Http\Controllers\RegisterController;
-
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\ExamsController as AdminExamsController;
 use App\Http\Controllers\Admin\SubjectsController as AdminSubjectsController;
@@ -16,7 +12,7 @@ use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\ExamsController as ClientExamsController;
 use App\Http\Controllers\Client\SubjectsController as ClientSubjectsController;
 use App\Http\Controllers\Client\QuestionsController as ClientQuestionsController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +25,7 @@ use App\Http\Controllers\Client\QuestionsController as ClientQuestionsController
 |
 */
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
 
     Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home');
 
@@ -44,11 +40,11 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/{id}', [AdminExamsController::class, 'show'])->name('admin.exams.show');
 
-        Route::get('/{id}/edit', [AdminExamsController::class, 'edit'])->name('admin.exams.edit');
+        Route::get('/edit/{id}', [AdminExamsController::class, 'edit'])->name('admin.exams.edit');
 
-        Route::put('/{id}', [AdminExamsController::class, 'update'])->name('admin.exams.update');
+        Route::put('/update', [AdminExamsController::class, 'update'])->name('admin.exams.update');
 
-        Route::delete('/{id}', [AdminExamsController::class, 'destroy'])->name('admin.exams.destroy');
+        Route::delete('/delete/{id}', [AdminExamsController::class, 'destroy'])->name('admin.exams.destroy');
     });
 
     Route::group(['prefix' => 'subjects'], function () {
@@ -60,11 +56,11 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/{id}', [AdminSubjectsController::class, 'show'])->name('admin.subjects.show');
 
-        Route::get('/{id}/edit', [AdminSubjectsController::class, 'edit'])->name('admin.subjects.edit');
+        Route::get('/edit/{id}', [AdminSubjectsController::class, 'edit'])->name('admin.subjects.edit');
 
-        Route::put('/{id}', [AdminSubjectsController::class, 'update'])->name('admin.subjects.update');
+        Route::put('/update', [AdminSubjectsController::class, 'update'])->name('admin.subjects.update');
 
-        Route::delete('/{id}', [AdminSubjectsController::class, 'destroy'])->name('admin.subjects.destroy');
+        Route::delete('/delete/{id}', [AdminSubjectsController::class, 'destroy'])->name('admin.subjects.destroy');
     });
 
     Route::group(['prefix' => 'questions'], function () {
@@ -80,11 +76,17 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/{id}', [AdminQuestionsController::class, 'show'])->name('admin.questions.show');
 
-        Route::get('/{id}/edit', [AdminQuestionsController::class, 'edit'])->name('admin.questions.edit');
+        Route::get('/edit/{id}', [AdminQuestionsController::class, 'edit'])->name('admin.questions.edit');
 
-        Route::put('/{id}', [AdminQuestionsController::class, 'update'])->name('admin.questions.update');
+        Route::get('/editByExam/{id}', [AdminQuestionsController::class, 'editByExam'])->name('admin.questions.editByExam');
 
-        Route::delete('/{id}', [AdminQuestionsController::class, 'destroy'])->name('admin.questions.destroy');
+        Route::put('/update', [AdminQuestionsController::class, 'update'])->name('admin.questions.update');
+
+        Route::put('/updateByExam', [AdminQuestionsController::class, 'updateByExam'])->name('admin.questions.updateByExam');
+
+        Route::delete('/delete/{id}', [AdminQuestionsController::class, 'destroy'])->name('admin.questions.destroy');
+
+        Route::delete('/deleteByExam/{id}', [AdminQuestionsController::class, 'destroyByExam'])->name('admin.questions.destroyByExam');
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -96,11 +98,11 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/{id}', [AdminUsersController::class, 'show'])->name('admin.users.show');
 
-        Route::get('/{id}/edit', [AdminUsersController::class, 'edit'])->name('admin.users.edit');
+        Route::get('/edit/{id}', [AdminUsersController::class, 'edit'])->name('admin.users.edit');
 
-        Route::put('/{id}', [AdminUsersController::class, 'update'])->name('admin.users.update');
+        Route::put('/update', [AdminUsersController::class, 'update'])->name('admin.users.update');
 
-        Route::delete('/{id}', [AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
+        Route::delete('/delete/{id}', [AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
     });
 });
 
@@ -108,30 +110,32 @@ Route::prefix('/')->group(function () {
 
     Route::get('/', [ClientHomeController::class, 'index'])->name('/');
 
-    Route::prefix('exams')->group(function () {
-        Route::get('/', [ClientExamsController::class, 'index'])->name('exams');
-
-        Route::get('/{id}', [ClientExamsController::class, 'show'])->name('exams.show');
-    });
-
     Route::prefix('subjects')->group(function () {
         Route::get('/', [ClientSubjectsController::class, 'index'])->name('subjects');
 
         Route::get('/{id}', [ClientSubjectsController::class, 'show'])->name('subjects.show');
+
+        Route::middleware('auth')->post('/{id}', [ClientSubjectsController::class, 'registerSubject'])->name('subjects.register');
+
+        Route::middleware('auth')->delete('/{id}', [ClientSubjectsController::class, 'unregisterSubject'])->name('subjects.unregister');
     });
 
     Route::prefix('questions')->group(function () {
         Route::get('/', [ClientQuestionsController::class, 'index'])->name('questions');
 
-        Route::get('/{id}', [ClientQuestionsController::class, 'show'])->name('questions.show');
+        Route::middleware('auth')->get('/{examId}/{userId}', [ClientQuestionsController::class, 'show'])->name('questions.show');
 
         Route::post('/{id}/point', [ClientQuestionsController::class, 'point'])->name('questions.point');
+
+        Route::post('/complete/{examId}/{userId}', [ClientQuestionsController::class, 'completeExam'])->name('questions.complete');
+
+        Route::get('/result/{examId}/{userId}', [ClientQuestionsController::class, 'result'])->name('questions.result');
     });
 });
-
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
 
 Route::fallback(function () {
     $response = response()->view('errors.404', [], 404);
     return $response;
 });
+
+Auth::routes();

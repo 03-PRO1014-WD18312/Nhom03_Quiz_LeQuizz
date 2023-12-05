@@ -11,38 +11,31 @@ class Users extends Model
 {
     use HasFactory;
 
-    public function getAllUsers()
+    public function joinUserAndSubject()
     {
-        $users = DB::select('SELECT * FROM users');
-
-        return $users;
-    }
-
-    public function getUserById(string $id)
-    {
-        $user = DB::select('SELECT * FROM users WHERE id_user = ?', [$id]);
+        $user = DB::select('SELECT * FROM users INNER JOIN users_subjects ON users.id = users_subjects.user_id INNER JOIN subjects ON users_subjects.subject_id = subjects.id');
 
         return $user;
     }
 
-    public function createUser(array $data)
+    public function registerSubjectByUserId(string $subject_id, string $user_id)
     {
-        $user = DB::insert('INSERT INTO users (name_user, gender_user, dob_user, email_user, pass_user) VALUES (?, ?, ?, ?, ?)', [$data['name'], $data['gender'], $data['dob'], $data['email'], $data['pass']]);
+        $register = DB::insert('INSERT INTO users_subjects (user_id, subject_id) VALUES (?, ?)', [$user_id, $subject_id]);
 
-        return $user;
+        return $register;
     }
 
-    public function updateUser(array $data, string $id)
+    public function unregisterSubjectByUserId(string $subject_id, string $user_id)
     {
-        $user = DB::update('UPDATE users SET name_user = ?, gender_user = ?, dob_user = ?, email_user = ?, pass_user = ? WHERE id_user = ?', [$data['name'], $data['gender'], $data['dob'], $data['email'], $data['pass'], $id]);
+        $unregister = DB::delete('DELETE FROM users_subjects WHERE user_id = ? AND subject_id = ?', [$user_id, $subject_id]);
 
-        return $user;
+        return $unregister;
     }
 
-    public function deleteUser(string $id)
+    public function checkRegisterSubjectByUserId(string $subject_id, string $user_id)
     {
-        $user = DB::delete('DELETE FROM users WHERE id_user = ?', [$id]);
+        $check = DB::select('SELECT * FROM users_subjects WHERE user_id = ? AND subject_id = ?', [$user_id, $subject_id]);
 
-        return $user;
+        return $check;
     }
 }

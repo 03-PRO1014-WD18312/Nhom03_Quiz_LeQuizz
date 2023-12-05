@@ -20,28 +20,28 @@ class Users extends Model
 
     public function getUserById(string $id)
     {
-        $user = DB::select('SELECT * FROM users WHERE id_user = ?', [$id]);
+        $user = DB::select('SELECT * FROM users WHERE id = ?', [$id]);
 
         return $user;
     }
 
     public function createUser(array $data)
     {
-        $user = DB::insert('INSERT INTO users (name_user, gender_user, dob_user, email_user, pass_user) VALUES (?, ?, ?, ?, ?)', [$data['name'], $data['gender'], $data['dob'], $data['email'], $data['pass']]);
+        $user = DB::insert('INSERT INTO users (name, email, email_verified_at, password, role) VALUES (?, ?, ?, ?, ?)', [$data['name'], $data['email'], $data['email_verified_at'], $data['password'], $data['role']]);
 
         return $user;
     }
 
     public function updateUser(array $data, string $id)
     {
-        $user = DB::update('UPDATE users SET name_user = ?, gender_user = ?, dob_user = ?, email_user = ?, pass_user = ? WHERE id_user = ?', [$data['name'], $data['gender'], $data['dob'], $data['email'], $data['pass'], $id]);
+        $user = DB::update('UPDATE users SET name = ?, email = ?, email_verified_at = ?, password = ?, role = ? WHERE id = ?', [$data['name'], $data['email'], $data['email_verified_at'], $data['password'], $data['role'], $id]);
 
         return $user;
     }
 
     public function deleteUser(string $id)
     {
-        $user = DB::delete('DELETE FROM users WHERE id_user = ?', [$id]);
+        $user = DB::delete('DELETE FROM users WHERE id = ?', [$id]);
 
         return $user;
     }

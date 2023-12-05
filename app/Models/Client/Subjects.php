@@ -20,7 +20,7 @@ class Subjects extends Model
 
     public function getSubjectById(string $id)
     {
-        $subject = DB::select('SELECT * FROM subjects WHERE id_subject = ?', [$id]);
+        $subject = DB::select('SELECT * FROM subjects WHERE id = ?', [$id]);
 
         return $subject;
     }

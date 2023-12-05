@@ -20,33 +20,34 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Gender</th>
-                            <th>Date of Birth</th>
                             <th>Email</th>
-                            <th>Password</th>
+                            <th>Email Verified at</th>
+                            <th>Created at</th>
+                            <th>Updated at</th>
                             <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($users as $key => $user)
+                        @foreach ($listUsers as $user)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
-
-                                <td>{{ $user->name_user }}</td>
-
-                                <td>{{ $user->gender_user }}</td>
-
-                                <td>{{ $user->dob_user }}</td>
-
-                                <td>{{ $user->email_user }}</td>
-
-                                <td>{{ $user->pass_user }}</td>
-
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td>
-                                    <a href="{{ route('admin.users.edit', $user->id_user) }}" class="btn btn-primary">Edit</a>
-                                    <a href="{{ route('admin.users.destroy', $user->id_user) }}" class="btn btn-danger"
-                                        onclick="return confirm('Are you sure?')">Delete</a>
+                                    @if ($user->email_verified_at == null)
+                                        <span class="badge bg-danger">No Email verified</span>
+                                    @else
+                                        {{ $user->email_verified_at }}
+                                    @endif
+                                </td>
+                                <td>{{ $user->created_at }}</td>
+                                <td>{{ $user->updated_at }}</td>
+                                <td>
+                                    {{-- <a href="{{ route('admin.users.edit', ['id' => $user->id]) }}"
+                                        class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('admin.users.delete', ['id' => $user->id]) }}"
+                                        class="btn btn-danger">Delete</a> --}}
                                 </td>
                             </tr>
                         @endforeach
