@@ -11,6 +11,17 @@ use App\Models\Admin\Questions;
 
 class ExamsController extends Controller
 {
+    private $subjects;
+    private $exams;
+    private $questions;
+
+    public function __construct()
+    {
+        $this->exams = new Exams();
+        $this->subjects = new Subjects();
+        $this->questions = new Questions();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -18,16 +29,13 @@ class ExamsController extends Controller
     // Use the index method to display a list of exams. / Method: GET / URI: /admin/exams
     public function index()
     {
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+        $listExams = $this->exams->getAllExams();
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('admin.exams.lists', compact('exams', 'subjects', 'questions'));
+        return view('admin.exams.lists', compact('listExams', 'listSubjects', 'listQuestions'));
     }
 
     /**
@@ -37,10 +45,9 @@ class ExamsController extends Controller
     // Use the create method to display a form for creating a new exam. / Method: GET / URI: /admin/exams/create
     public function create()
     {
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        return view('admin.exams.create', compact('subjects'));
+        return view('admin.exams.create', compact('listSubjects'));
     }
 
     /**
@@ -52,10 +59,11 @@ class ExamsController extends Controller
     {
         $data = $request->all();
 
-        $exams = new Exams();
-        $exams = $exams->createExam($data);
-
-        return redirect()->route('admin.exams');
+        if ($this->exams->createExam($data)) {
+            return redirect()->route('admin.exams')->with('success', 'Exam created successfully');
+        } else {
+            return redirect()->route('admin.exams')->with('error', 'Exam creation failed');
+        }
     }
 
     /**
@@ -65,32 +73,31 @@ class ExamsController extends Controller
     // Use the show method to display a specific exam. / Method: GET / URI: /admin/exams/{id}
     public function show(string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $getExam = $this->exams->getExamById($id);
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('admin.exams.show', compact('exams', 'subjects', 'questions'));
+        $maxQuestions = $this->exams->getMaxQuestions();
+
+        return view('admin.exams.show', compact('getExam', 'listSubjects', 'listQuestions', 'maxQuestions'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
 
-    // Use the edit method to display a form for editing a specific exam. / Method: GET / URI: /admin/exams/{id}/edit
-    public function edit(string $id)
+    // Use the edit method to display a form for editing a specific exam. / Method: GET / URI: /admin/exams/edit/{id}
+    public function edit(Request $request, string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $request->session()->put('id_exam', $id);
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $getExam = $this->exams->getExamById($id);
 
-        return view('admin.exams.edit', compact('exams', 'subjects'));
+        $listSubjects = $this->subjects->getAllSubjects();
+
+        return view('admin.exams.edit', compact('getExam', 'listSubjects'));
     }
 
     /**
@@ -98,14 +105,16 @@ class ExamsController extends Controller
      */
 
     // Use the update method to update a specific exam in the database. / Method: PUT/PATCH / URI: /admin/exams/{id}
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
+        $id = session('id_exam');
         $data = $request->all();
 
-        $exams = new Exams();
-        $exams = $exams->updateExam($data, $id);
-
-        return redirect()->route('admin.exams');
+        if ($this->exams->updateExam($data, $id)) {
+            return redirect()->route('admin.exams')->with('success', 'Exam updated successfully');
+        } else {
+            return redirect()->route('admin.exams')->with('error', 'Exam update failed');
+        }
     }
 
     /**
@@ -115,9 +124,10 @@ class ExamsController extends Controller
     // Use the destroy method to delete a specific exam from the database. / Method: DELETE / URI: /admin/exams/{id}
     public function destroy(string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->deleteExam($id);
-
-        return redirect()->route('admin.exams');
+        if ($this->exams->deleteExam($id)) {
+            return redirect()->route('admin.exams')->with('success', 'Exam deleted successfully');
+        } else {
+            return redirect()->route('admin.exams')->with('error', 'Exam deletion failed');
+        }
     }
 }

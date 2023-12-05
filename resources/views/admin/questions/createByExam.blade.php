@@ -12,10 +12,10 @@
     <div class="row">
         @include('admin.blocks.sidebar')
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @foreach ($exams as $exam)
-                <h2 class="pt-3 pb-2 mb-3">Create Questions by Exam: {{ $exam->exam_title }}</h2>
+            @foreach ($getExam as $exam)
+                <h2 class="pt-3 pb-2 mb-3">Create Questions by Exam: {{ $exam->name }}</h2>
 
-                <form action="{{ route('admin.questions.storeByExam', $exam->id_exam) }}" method="POST">
+                <form action="{{ route('admin.questions.storeByExam', $exam->id) }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="question" class="form-label">Question</label>
@@ -26,12 +26,12 @@
                     <div class="mb-3">
                         <label for="exam" class="form-label">Exam</label>
 
-                        @foreach ($exams as $exam)
+                        @foreach ($getExam as $exam)
                             <input type="hidden" class="form-control" id="exam" name="exam"
-                                value="{{ $exam->id_exam }}" placeholder="Enter exam">
+                                value="{{ $exam->id }}" placeholder="Enter exam">
 
                             <input type="text" class="form-control" id="exam" name="exam"
-                                value="{{ $exam->exam_title }}" placeholder="Enter exam" disabled>
+                                value="{{ $exam->name }}" placeholder="Enter exam" disabled>
                         @endforeach
                     </div>
 

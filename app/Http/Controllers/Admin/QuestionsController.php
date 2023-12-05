@@ -11,6 +11,17 @@ use App\Models\Admin\Questions;
 
 class QuestionsController extends Controller
 {
+    private $subjects;
+    private $exams;
+    private $questions;
+
+    public function __construct()
+    {
+        $this->subjects = new Subjects();
+        $this->exams = new Exams();
+        $this->questions = new Questions();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -18,35 +29,30 @@ class QuestionsController extends Controller
     {
         $search = $request->input('exam');
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listExams = $this->exams->getAllExams();
 
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('admin.questions.lists', compact('subjects', 'exams', 'questions', 'search'));
+        return view('admin.questions.lists', compact('listExams', 'listSubjects', 'listQuestions', 'search'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+        $listExams = $this->exams->getAllExams();
 
-        return view('admin.questions.create', compact('exams'));
+        return view('admin.questions.create', compact('listExams'));
     }
 
     public function createByExam(string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $getExam = $this->exams->getExamById($id);
 
-        return view('admin.questions.createByExam', compact('exams'));
+        return view('admin.questions.createByExam', compact('getExam'));
     }
 
     /**
@@ -56,20 +62,22 @@ class QuestionsController extends Controller
     {
         $data = $request->all();
 
-        $questions = new Questions();
-        $questions = $questions->createQuestion($data);
-
-        return redirect()->route('admin.questions');
+        if ($this->questions->createQuestion($data)) {
+            return redirect()->route('admin.questions')->with('success', 'Question created successfully');
+        } else {
+            return redirect()->route('admin.questions')->with('error', 'Question created failed');
+        }
     }
 
     public function storeByExam(Request $request, string $id)
     {
         $data = $request->all();
 
-        $questions = new Questions();
-        $questions = $questions->createQuestion($data);
-
-        return redirect()->route('admin.exams.show', $id);
+        if ($this->questions->createQuestion($data)) {
+            return redirect()->route('admin.exams.show', $id)->with('success', 'Question created successfully');
+        } else {
+            return redirect()->route('admin.exams.show', $id)->with('error', 'Question created failed');
+        }
     }
 
     /**
@@ -77,37 +85,61 @@ class QuestionsController extends Controller
      */
     public function show(string $id)
     {
-        $questions = new Questions();
-        $questions = $questions->getQuestionById($id);
+        $getQuestion = $this->questions->getQuestionById($id);
 
-        return view('admin.questions.show', compact('questions'));
+        return view('admin.questions.show', compact('getQuestion'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        $questions = new Questions();
-        $questions = $questions->getQuestionById($id);
+        $request->session()->put('id_question', $id);
 
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+        $getQuestion = $this->questions->getQuestionById($id);
 
-        return view('admin.questions.edit', compact('questions', 'exams'));
+        $listExams = $this->exams->getAllExams();
+
+        return view('admin.questions.edit', compact('getQuestion', 'listExams'));
+    }
+
+    public function editByExam(Request $request, string $id)
+    {
+        $request->session()->put('id_question', $id);
+
+        $getQuestion = $this->questions->getQuestionById($id);
+
+        $listExams = $this->exams->getAllExams();
+
+        return view('admin.questions.editByExam', compact('getQuestion', 'listExams'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
+        $id = session('id_question');
         $data = $request->all();
 
-        $questions = new Questions();
-        $questions = $questions->updateQuestion($data, $id);
+        if ($this->questions->updateQuestion($data, $id)) {
+            return redirect()->route('admin.questions')->with('success', 'Question updated successfully');
+        } else {
+            return redirect()->route('admin.questions')->with('error', 'Question updated failed');
+        }
+    }
 
-        return redirect()->route('admin.questions');
+    public function updateByExam(Request $request)
+    {
+        $id = session('id_question');
+        $data = $request->all();
+
+        if ($this->questions->updateQuestion($data, $id)) {
+            return redirect()->route('admin.exams.show', [$data['exam']])->with('success', 'Question updated successfully');
+        } else {
+            return redirect()->route('admin.exams.show', [$data['exam']])->with('error', 'Question updated failed');
+        }
     }
 
     /**
@@ -115,9 +147,20 @@ class QuestionsController extends Controller
      */
     public function destroy(string $id)
     {
-        $questions = new Questions();
-        $questions = $questions->deleteQuestion($id);
+        if ($this->questions->deleteQuestion($id)) {
+            return redirect()->route('admin.questions')->with('success', 'Question deleted successfully');
+        } else {
+            return redirect()->route('admin.questions')->with('error', 'Question deleted failed');
+        }
+    }
 
-        return redirect()->route('admin.questions');
+    public function destroyByExam(string $id)
+    {
+
+        if ($this->questions->deleteQuestion($id)) {
+            return redirect()->back()->with('success', 'Question deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'Question deleted failed');
+        }
     }
 }

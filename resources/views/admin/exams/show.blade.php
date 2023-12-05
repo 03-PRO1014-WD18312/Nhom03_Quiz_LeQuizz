@@ -12,9 +12,17 @@
     <div class="row">
         @include('admin.blocks.sidebar')
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @foreach ($exams as $exam)
-                <h2 class="pt-3 pb-2 mb-3">Manage Questions Exam: {{ $exam->exam_title }}</h2>
+            @php $i = 1; @endphp
 
+            @foreach ($getExam as $exam)
+                <h2 class="pt-3 pb-2 mb-3">Manage Questions Exam: {{ $exam->name }}</h2>
+
+                @foreach ($maxQuestions as $max)
+                    @if ($exam->id == $max->id)
+                        <h5 class="pt-3 pb-2 mb-3">Total questions:
+                            {{ $max->number_of_questions }}/{{ $exam->number_of_questions }}</h5>
+                    @endif
+                @endforeach
 
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -33,37 +41,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($questions as $key => $question)
-                                @if ($exam->id_exam == $question->id_exam)
+                            @foreach ($listQuestions as $question)
+                                @if ($exam->id == $question->exam_id)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $question->title_question }}</td>
+                                        <td>{{ $i++ }}</td>
+                                        <td>{{ $question->name }}</td>
                                         <td>
-                                            @foreach ($subjects as $subject)
-                                                @foreach ($exams as $exam)
-                                                    @if ($exam->id_exam == $question->id_exam && $exam->id_subject == $subject->id_subject)
-                                                        {{ $subject->name_subject }}
+                                            @foreach ($listSubjects as $subject)
+                                                @foreach ($getExam as $exam)
+                                                    @if ($exam->id == $question->exam_id && $exam->subject_id == $subject->id)
+                                                        {{ $subject->name }}
                                                     @endif
                                                 @endforeach
                                             @endforeach
                                         </td>
                                         <td>
-                                            @foreach ($exams as $exam)
-                                                @if ($exam->id_exam == $question->id_exam)
-                                                    {{ $exam->exam_title }}
+                                            @foreach ($getExam as $exam)
+                                                @if ($exam->id == $question->exam_id)
+                                                    {{ $exam->name }}
                                                 @endif
                                             @endforeach
                                         </td>
-                                        <td>{{ $question->choice1_question }}</td>
-                                        <td>{{ $question->choice2_question }}</td>
-                                        <td>{{ $question->choice3_question }}</td>
-                                        <td>{{ $question->choice4_question }}</td>
+                                        <td>{{ $question->option_a }}</td>
+                                        <td>{{ $question->option_b }}</td>
+                                        <td>{{ $question->option_c }}</td>
+                                        <td>{{ $question->option_d }}</td>
                                         <td>{{ $question->correct_answer }}</td>
                                         <td>
-                                            <a href="{{ route('admin.questions.edit', $question->id_question) }}"
+                                            <a href="{{ route('admin.questions.editByExam', $question->id) }}"
                                                 class="btn btn-sm btn-primary">Edit</a>
 
-                                            <form action="{{ route('admin.questions.destroy', $question->id_question) }}"
+                                            <form action="{{ route('admin.questions.destroyByExam', $question->id) }}"
                                                 method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -77,9 +85,14 @@
                         </tbody>
                     </table>
 
-                    <a href="{{ route('admin.questions.createByExam', $exam->id_exam) }}"
-                        class="btn btn-sm btn-primary">Add
-                        Question</a>
+                    @if ($max->number_of_questions == $exam->number_of_questions)
+                        <div class="alert alert-success">You have reached the maximum number of questions for this
+                            exam.
+                        </div>
+                    @else
+                        <a href="{{ route('admin.questions.createByExam', $exam->id) }}" class="btn btn-primary">Add
+                            Question</a>
+                    @endif
             @endforeach
         </div>
 
