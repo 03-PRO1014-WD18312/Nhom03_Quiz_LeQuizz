@@ -69,7 +69,9 @@ class UsersController extends Controller
 
         $getUser = $this->users->getUserById($id);
 
-        return view('admin.users.edit', compact('getUser'));
+        $listUsers = $this->users->getAllUsers();
+
+        return view('admin.users.edit', compact('getUser', 'listUsers'));
     }
 
     /**

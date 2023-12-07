@@ -13,14 +13,14 @@ class UserScore extends Model
 
     public function createUserScore($data)
     {
-        $create = DB::insert('INSERT INTO users_scores (user_id, exam_id, score) VALUES (?, ?, ?)', [$data['user_id'], $data['exam_id'], $data['score']]);
+        $create = DB::insert('INSERT INTO users_exams (user_id, exam_id, score) VALUES (?, ?, ?)', [$data['user_id'], $data['exam_id'], $data['score']]);
 
         return $create;
     }
 
     public function getUserScoreByExamIdAndUserId($examId, $userId)
     {
-        $getUserScore = DB::select('SELECT * FROM users_scores WHERE exam_id = ? AND user_id = ? ORDER BY id DESC LIMIT 1', [$examId, $userId]);
+        $getUserScore = DB::select('SELECT * FROM users_exams WHERE exam_id = ? AND user_id = ? ORDER BY id DESC LIMIT 1', [$examId, $userId]);
 
         return $getUserScore;
     }

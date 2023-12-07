@@ -34,7 +34,7 @@ class Users extends Model
 
     public function updateUser(array $data, string $id)
     {
-        $user = DB::update('UPDATE users SET name = ?, email = ?, email_verified_at = ?, password = ?, role = ? WHERE id = ?', [$data['name'], $data['email'], $data['email_verified_at'], $data['password'], $data['role'], $id]);
+        $user = DB::update('UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE id = ?', [$data['name'], $data['email'], $data['password'], $data['role'], $id]);
 
         return $user;
     }
