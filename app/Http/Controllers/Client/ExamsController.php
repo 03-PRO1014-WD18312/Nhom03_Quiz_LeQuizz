@@ -11,48 +11,31 @@ use App\Models\Client\Questions;
 
 class ExamsController extends Controller
 {
+    private $subjects;
+    private $exams;
+    private $questions;
+
+    public function __construct()
+    {
+        $this->subjects = new Subjects();
+        $this->exams = new Exams();
+        $this->questions = new Questions();
+    }
+
     /**
      * Display a listing of the resource.
      */
 
     public function index()
     {
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listExams = $this->exams->getAllExams();
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('clients.exams.lists', compact('exams', 'subjects', 'questions'));
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-
-    public function create()
-    {
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
-
-        return view('clients.exams.create', compact('subjects'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-    public function store(Request $request)
-    {
-        $data = $request->all();
-
-        $exams = new Exams();
-        $exams = $exams->createExam($data);
-
-        return redirect()->route('clients.exams');
+        return view('clients.exams.lists', compact('listSubjects', 'listExams', 'listQuestions'));
     }
 
     /**
@@ -61,15 +44,12 @@ class ExamsController extends Controller
 
     public function show(string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $getExam = $this->exams->getExamById($id);
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('clients.exams.show', compact('exams', 'subjects', 'questions'));
+        return view('clients.exams.show', compact('listSubjects', 'getExam', 'listQuestions'));
     }
 }

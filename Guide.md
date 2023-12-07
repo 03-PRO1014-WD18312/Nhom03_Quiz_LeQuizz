@@ -33,3 +33,7 @@
 # Start the development server
 
 -   php artisan serve
+
+# Run vite dev server (Optional, If any)
+
+-   npm run dev

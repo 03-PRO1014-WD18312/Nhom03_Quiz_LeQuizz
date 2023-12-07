@@ -7,53 +7,83 @@ use Illuminate\Http\Request;
 
 use App\Models\Client\Subjects;
 use App\Models\Client\Exams;
-use App\Models\Client\Questions;
+use App\Models\Client\Users;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $subjects;
+    private $exams;
+    private $users;
 
-    // Use the index method to display a list of exams. / Method: GET / URI: /admin/exams
+    public function __construct()
+    {
+        $this->subjects = new Subjects();
+        $this->exams = new Exams();
+        $this->users = new Users();
+    }
+
     public function index()
     {
         return view('client.subjects.lists');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-
-    // Use the create method to display a form for creating a new exam. / Method: GET / URI: /admin/exams/create
-    public function create()
+    public function show(string $id)
     {
-        return view('client.subjects.create');
+        $getSubject = $this->subjects->getSubjectById($id);
+
+        $listExams = $this->exams->getAllExams();
+
+        $checkRegister = $this->checkRegisterSubject($id);
+
+        return view('clients.subjects.show', compact('getSubject', 'listExams', 'checkRegister'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-    // Use the store method to store a newly created exam in the database. / Method: POST / URI: /admin/exams
-    public function store(Request $request)
+    public function registerSubject(string $id)
     {
-        //
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+
+            $register = $this->users->registerSubjectByUserId($id, $user_id);
+
+
+            if ($register) {
+                return redirect()->route('subjects.show', ['id' => $id])->with('success', 'Đăng ký thành công');
+            } else {
+                return redirect()->route('subjects.show', ['id' => $id])->with('error', 'Đăng ký thất bại');
+            }
+        } else {
+            return redirect()->route('subjects.show', ['id' => $id])->with('error', 'Bạn cần đăng nhập để đăng ký');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-
-    // Use the show method to display the details of a specific exam. / Method: GET / URI: /admin/exams/{id}
-    public function show($id)
+    public function unregisterSubject(string $id)
     {
-        $subjects = new Subjects();
-        $subjects = $subjects->getSubjectById($id);
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
 
-        $exams = new Exams();
-        $exams = $exams->getAllExams();
+            $unregister = $this->users->unregisterSubjectByUserId($id, $user_id);
 
-        return view('clients.subjects.show', compact('subjects', 'exams'));
+            if ($unregister) {
+                return redirect()->route('subjects.show', ['id' => $id])->with('success', 'Hủy đăng ký thành công');
+            } else {
+                return redirect()->route('subjects.show', ['id' => $id])->with('error', 'Hủy đăng ký thất bại');
+            }
+        } else {
+            return redirect()->route('subjects.show', ['id' => $id])->with('error', 'Bạn cần đăng nhập để hủy đăng ký');
+        }
+    }
+
+    public function checkRegisterSubject(string $id)
+    {
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+
+            $check = $this->users->checkRegisterSubjectByUserId($id, $user_id);
+
+            return $check;
+        } else {
+            return false;
+        }
     }
 }

@@ -8,9 +8,24 @@ use Illuminate\Http\Request;
 use App\Models\Client\Subjects;
 use App\Models\Client\Exams;
 use App\Models\Client\Questions;
+use App\Models\Client\UserScore;
 
 class QuestionsController extends Controller
 {
+    private $subjects;
+    private $exams;
+    private $questions;
+    private $userScore;
+
+    public function __construct()
+    {
+        $this->subjects = new Subjects();
+        $this->exams = new Exams();
+        $this->questions = new Questions();
+        $this->userScore = new UserScore();
+    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -23,36 +38,41 @@ class QuestionsController extends Controller
      */
     public function show(string $id)
     {
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $getExam = $this->exams->getExamById($id);
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
-        return view('clients.questions.show', compact('exams', 'questions'));
+        foreach ($getExam as $exam) {
+            $timeLimit = $exam->time_limit;
+            foreach ($listQuestions as $question) {
+                if ($exam->id == $question->exam_id) {
+                    $countdown = $timeLimit * 60;
+                }
+            }
+        }
+
+        return view('clients.questions.show', compact('getExam', 'listQuestions', 'countdown'));
     }
 
-    public function point(Request $request, string $id)
+    public function completeExam(Request $request, string $examId, string $userId)
     {
         $answers = $request->all();
 
-        $exams = new Exams();
-        $exams = $exams->getExamById($id);
+        $getExam = $this->exams->getExamById($examId);
 
-        $questions = new Questions();
-        $questions = $questions->getAllQuestions();
+        $listQuestions = $this->questions->getAllQuestions();
 
         $userAnswers = $answers['answers'];
 
         $point = 0;
 
-        foreach ($exams as $exam) {
-            $limitQuest = $exam->exam_limit_quest;
+        foreach ($getExam as $exam) {
+            $limitQuest = $exam->number_of_questions;
 
-            foreach ($questions as $question) {
-                if ($exam->id_exam == $question->id_exam) {
+            foreach ($listQuestions as $question) {
+                if ($exam->id == $question->exam_id) {
                     foreach ($userAnswers as $key => $userAnswer) {
-                        if ($question->id_question == $key) {
+                        if ($question->id == $key) {
                             if ($question->correct_answer == $userAnswer) {
                                 $point++;
                             }
@@ -64,6 +84,27 @@ class QuestionsController extends Controller
 
         $point = $point / $limitQuest * 10;
 
-        return view('clients.questions.point', compact('exams', 'questions', 'point'));
+        $data = [
+            'user_id' => $userId,
+            'exam_id' => $examId,
+            'score' => $point
+        ];
+
+        $createUserScore = $this->userScore->createUserScore($data);
+
+        if ($createUserScore) {
+            return redirect()->route('questions.result', [$examId, $userId])->with('success', 'Exam completed successfully!');
+        } else {
+            return redirect()->route('questions.result', [$examId, $userId])->with('error', 'Exam completed failed!');
+        }
+    }
+
+    public function result(string $examId, string $userId)
+    {
+        $getExam = $this->exams->getExamById($examId);
+
+        $getUserScore = $this->userScore->getUserScoreByExamIdAndUserId($examId, $userId);
+
+        return view('clients.questions.result', compact('getExam', 'getUserScore'));
     }
 }

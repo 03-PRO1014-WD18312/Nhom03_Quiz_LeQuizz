@@ -9,15 +9,21 @@ use App\Models\Admin\Users;
 
 class UsersController extends Controller
 {
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new Users();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = new Users();
-        $users = $users->getAllUsers();
+        $listUsers = $this->users->getAllUsers();
 
-        return view('admin.users.lists', compact('users'));
+        return view('admin.users.lists', compact('listUsers'));
     }
 
     /**
@@ -25,10 +31,9 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $users = new Users();
-        $users = $users->getAllUsers();
+        $listUsers = $this->users->getAllUsers();
 
-        return view('admin.users.create', compact('users'));
+        return view('admin.users.create', compact('listUsers'));
     }
 
     /**
@@ -38,10 +43,11 @@ class UsersController extends Controller
     {
         $data = $request->all();
 
-        $users = new Users();
-        $users = $users->createUser($data);
-
-        return redirect()->route('admin.users');
+        if ($this->users->createUser($data)) {
+            return redirect()->route('admin.users')->with('success', 'User created successfully');
+        } else {
+            return redirect()->route('admin.users')->with('error', 'User creation failed');
+        }
     }
 
     /**
@@ -49,34 +55,39 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        $users = new Users();
-        $users = $users->getUserById($id);
+        $getUser = $this->users->getUserById($id);
 
-        return view('admin.users.show', compact('users'));
+        return view('admin.users.show', compact('getUser'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        $users = new Users();
-        $users = $users->getUserById($id);
+        $request->session()->put('id_user', $id);
 
-        return view('admin.users.edit', compact('users'));
+        $getUser = $this->users->getUserById($id);
+
+        $listUsers = $this->users->getAllUsers();
+
+        return view('admin.users.edit', compact('getUser', 'listUsers'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
+        $id = session('id_user');
+
         $data = $request->all();
 
-        $users = new Users();
-        $users = $users->updateUser($data, $id);
-
-        return redirect()->route('admin.users');
+        if ($this->users->updateUser($data, $id)) {
+            return redirect()->route('admin.users')->with('success', 'User updated successfully');
+        } else {
+            return redirect()->route('admin.users')->with('error', 'User update failed');
+        }
     }
 
     /**
@@ -84,9 +95,10 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = new Users();
-        $user = $user->deleteUser($id);
-
-        return redirect()->route('admin.users');
+        if ($this->users->deleteUser($id)) {
+            return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+        } else {
+            return redirect()->route('admin.users')->with('error', 'User deletion failed');
+        }
     }
 }

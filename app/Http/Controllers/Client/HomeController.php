@@ -9,11 +9,19 @@ use App\Models\Client\Subjects;
 
 class HomeController extends Controller
 {
+    private $subjects;
+
+    public function __construct()
+    {
+        $this->subjects = new Subjects();
+    }
+
     public function index()
     {
-        $subjects = new Subjects();
-        $subjects = $subjects->getAllSubjects();
+        $listSubjects = $this->subjects->getAllSubjects();
 
-        return view('clients.home', compact('subjects'));
+        $token = csrf_token();
+
+        return view('clients.home', compact('listSubjects', 'token'));
     }
 }
