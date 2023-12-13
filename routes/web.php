@@ -37,6 +37,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::group(['prefix' => 'exams'], function () {
             Route::get('/', [AdminExamsController::class, 'index'])->name('admin.exams');
 
+            Route::get('/search', [AdminExamsController::class, 'search'])->name('admin.exams.search');
+
             Route::get('/create', [AdminExamsController::class, 'create'])->name('admin.exams.create');
 
             Route::get('/createBySubject/{id}', [AdminExamsController::class, 'createBySubject'])->name('admin.exams.createBySubject');
@@ -56,6 +58,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::group(['prefix' => 'subjects'], function () {
             Route::get('/', [AdminSubjectsController::class, 'index'])->name('admin.subjects');
+
+            Route::get('/search', [AdminSubjectsController::class, 'search'])->name('admin.subjects.search');
 
             Route::get('/create', [AdminSubjectsController::class, 'create'])->name('admin.subjects.create');
 
@@ -98,10 +102,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', [AdminUsersController::class, 'index'])->name('admin.users');
-
-            Route::get('/create', [AdminUsersController::class, 'create'])->name('admin.users.create');
-
-            Route::post('/', [AdminUsersController::class, 'store'])->name('admin.users.store');
 
             Route::get('/{id}', [AdminUsersController::class, 'show'])->name('admin.users.show');
 

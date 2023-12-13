@@ -26,3 +26,22 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        history.pushState(null, null, document.URL);
+
+        window.addEventListener('popstate', function() {
+            history.pushState(null, null, document.URL);
+        });
+
+        window.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            window.history.back();
+        });
+
+        window.addEventListener('load', function() {
+            window.history.forward();
+        });
+    </script>
+@endpush

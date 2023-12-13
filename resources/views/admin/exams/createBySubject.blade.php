@@ -50,6 +50,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Create</button>
+<<<<<<< HEAD
+                <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
+=======
+>>>>>>> develop
             </form>
         </div>
     </div>

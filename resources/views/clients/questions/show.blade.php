@@ -4,6 +4,17 @@
     Do Test
 @endsection
 
+@section('css')
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         @if (session('msg'))
@@ -192,10 +203,26 @@
             }
         }
 
+        history.pushState(null, null, document.URL);
+
+        window.addEventListener('popstate', function() {
+            history.pushState(null, null, document.URL);
+        });
+
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.querySelector('body').addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || e.key === 'f12') {
+                e.preventDefault();
+            }
+        });
+
         document.querySelector('#form-questions').addEventListener('submit', function(event) {
+            localStorage.removeItem('answers');
             localStorage.removeItem('countdown_' + window.location.href + '_minutes');
             localStorage.removeItem('countdown_' + window.location.href + '_seconds');
-            localStorage.removeItem('answers');
         });
     </script>
 @endpush
