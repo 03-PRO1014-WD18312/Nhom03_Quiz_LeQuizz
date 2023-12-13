@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('exam_id');
             $table->integer('score');
+            $table->timestamps();
         });
     }
 

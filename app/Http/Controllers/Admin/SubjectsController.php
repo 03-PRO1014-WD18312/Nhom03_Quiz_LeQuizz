@@ -4,22 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use App\Models\Admin\Subjects;
-use App\Models\Admin\Exams;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\Subjects;
+use App\Models\Exams;
 
 class SubjectsController extends Controller
 {
-    private $subjects;
-    private $exams;
-
-    public function __construct()
-    {
-        $this->subjects = new Subjects();
-        $this->exams = new Exams();
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +18,7 @@ class SubjectsController extends Controller
     // Use the index method to display a list of exams. / Method: GET / URI: /admin/exams
     public function index()
     {
-        $listSubjects = $this->subjects->getAllSubjects();
+        $listSubjects = Subjects::all();
 
         return view('admin.subjects.lists', compact('listSubjects'));
     }
@@ -39,7 +30,7 @@ class SubjectsController extends Controller
     // Use the create method to display a form for creating a new exam. / Method: GET / URI: /admin/exams/create
     public function create()
     {
-        $listSubjects = $this->subjects->getAllSubjects();
+        $listSubjects = Subjects::all();
 
         return view('admin.subjects.create', compact('listSubjects'));
     }
@@ -62,7 +53,15 @@ class SubjectsController extends Controller
 
         $data['img'] = $fileName;
 
-        if ($this->subjects->createSubject($data)) {
+        // dd($data);
+
+        $insertSubject = Subjects::insert([
+            'name' => $data['name'],
+            'description' => $data['detail'],
+            'image' => $data['img']
+        ]);
+
+        if ($insertSubject) {
             return redirect()->route('admin.subjects')->with('success', 'Subject created successfully');
         } else {
             return redirect()->route('admin.subjects')->with('error', 'Subject created failed');
@@ -76,9 +75,13 @@ class SubjectsController extends Controller
     // Use the show method to display a specific exam. / Method: GET / URI: /admin/exams/{id}
     public function show(string $id)
     {
-        $getSubject = $this->subjects->getSubjectById($id);
+        // $getSubject = $this->subjects->getSubjectById($id);
 
-        $listExams = $this->exams->getAllExams();
+        // $listExams = $this->exams->getAllExams();
+
+        $getSubject = Subjects::findOrFail($id);
+
+        $listExams = Exams::all();
 
         return view('admin.subjects.show', compact('getSubject', 'listExams'));
     }
@@ -92,7 +95,7 @@ class SubjectsController extends Controller
     {
         $request->session()->put('id_subject', $id);
 
-        $getSubject = $this->subjects->getSubjectById($id);
+        $getSubject = Subjects::findOrFail($id);
 
         return view('admin.subjects.edit', compact('getSubject'));
     }
@@ -104,28 +107,39 @@ class SubjectsController extends Controller
     // Use the update method to update a specific exam in the database. / Method: PUT/PATCH / URI: /admin/exams/{id}
     public function update(Request $request)
     {
-        $id = session('id_subject');
+        $id = session()->has('id_subject') ? session('id_subject') : null;
+
+        if (!$id) {
+            return redirect()->route('admin.subjects')->with('error', 'Invalid subject ID');
+        }
 
         $data = $request->all();
-
-        $getSubject = $this->subjects->getSubjectById($id);
+        $getSubject = Subjects::findOrFail($id);
 
         if ($request->hasFile('img')) {
-            $file = $request->img;
+            $file = $request->file('img');
             $ext = $file->getClientOriginalExtension();
             $fileName = time() . '.' . $ext;
             $file->storeAs('public', $fileName);
             $data['img'] = $fileName;
         } else {
-            $data['img'] = $getSubject[0]->image;
+            $data['img'] = $getSubject->image;
         }
 
-        if ($this->subjects->updateSubject($data, $id)) {
+        $updateSubject = Subjects::findOrFail($id)->update([
+            'name' => $data['name'],
+            'description' => $data['detail'],
+            'image' => $data['img']
+        ]);
+
+
+        if ($updateSubject) {
             return redirect()->route('admin.subjects')->with('success', 'Subject updated successfully');
         } else {
             return redirect()->route('admin.subjects')->with('error', 'Subject update failed');
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -134,7 +148,7 @@ class SubjectsController extends Controller
     // Use the destroy method to delete a specific exam from the database. / Method: DELETE / URI: /admin/exams/{id}
     public function destroy(string $id)
     {
-        if ($this->subjects->deleteSubject($id)) {
+        if (Subjects::findOrFail($id)->delete()) {
             return redirect()->route('admin.subjects')->with('success', 'Subject deleted successfully');
         } else {
             return redirect()->route('admin.subjects')->with('error', 'Subject deleted failed');
