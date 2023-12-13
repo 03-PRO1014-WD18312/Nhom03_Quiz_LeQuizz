@@ -18,6 +18,10 @@
 
 -   Create a database in your local machine and update the database credentials in .env file
 
+# Add Laravel ui
+
+-   composer require laravel/ui
+
 # Migrate the database
 
 -   php artisan migrate

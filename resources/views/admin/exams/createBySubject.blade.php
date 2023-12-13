@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Edit Exam
+    Create Exam
 @endsection
 
 @section('content')
@@ -12,19 +12,18 @@
     <div class="row">
         @include('admin.blocks.sidebar')
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h2 class="pt-3 pb-2 mb-3">Edit Exam: {{ $getExam->name }}</h2>
-            <form action="{{ route('admin.exams.update') }}" method="POST">
+            <h2 class="pt-3 pb-2 mb-3">Create Exam</h2>
+            <form action="{{ route('admin.exams.storeBySubject', $getSubject->id) }}" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="mb-3">
                     <label for="name" class="form-label">Exam Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Exam Name"
-                        value="{{ $getExam->name }}">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Exam Name">
                 </div>
 
                 <div class="mb-3">
                     <label for="timeLimit" class="form-label">Time Limit</label>
                     <select class="form-select" name="timeLimit">
+                        <option selected>Open this select time limit</option>
                         <option value="10">10 minute</option>
                         <option value="20">20 minute</option>
                         <option value="30">30 minute</option>
@@ -34,12 +33,12 @@
                 <div class="mb-3">
                     <label for="limitQuest" class="form-label">Limit Question</label>
                     <input type="number" class="form-control" id="limitQuest" name="limitQuest"
-                        placeholder="Limit Question" value="{{ $getExam->number_of_questions }}">
+                        placeholder="Limit Question">
                 </div>
 
                 <div class="mb-3">
                     <label for="desc" class="form-label">Description</label>
-                    <textarea class="form-control" id="desc" rows="5" name="desc">{{ $getExam->description }}</textarea>
+                    <textarea class="form-control" id="desc" rows="5" name="desc"></textarea>
                 </div>
 
                 <div class="mb-3">
@@ -50,7 +49,7 @@
                         disabled>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Create</button>
             </form>
         </div>
     </div>

@@ -5,23 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Admin\Users;
+use App\Models\User;
 
 class UsersController extends Controller
 {
-    private $users;
-
-    public function __construct()
-    {
-        $this->users = new Users();
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $listUsers = $this->users->getAllUsers();
+        $listUsers = User::all();
 
         return view('admin.users.lists', compact('listUsers'));
     }
@@ -31,7 +24,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $listUsers = $this->users->getAllUsers();
+        $listUsers = User::all();
 
         return view('admin.users.create', compact('listUsers'));
     }
@@ -43,7 +36,13 @@ class UsersController extends Controller
     {
         $data = $request->all();
 
-        if ($this->users->createUser($data)) {
+        $insertUser = User::insert([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ]);
+
+        if ($insertUser) {
             return redirect()->route('admin.users')->with('success', 'User created successfully');
         } else {
             return redirect()->route('admin.users')->with('error', 'User creation failed');
@@ -55,7 +54,7 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        $getUser = $this->users->getUserById($id);
+        $getUser = User::findOrFail($id);
 
         return view('admin.users.show', compact('getUser'));
     }
@@ -67,9 +66,9 @@ class UsersController extends Controller
     {
         $request->session()->put('id_user', $id);
 
-        $getUser = $this->users->getUserById($id);
+        $getUser = User::findOrFail($id);
 
-        $listUsers = $this->users->getAllUsers();
+        $listUsers = User::all();
 
         return view('admin.users.edit', compact('getUser', 'listUsers'));
     }
@@ -83,7 +82,13 @@ class UsersController extends Controller
 
         $data = $request->all();
 
-        if ($this->users->updateUser($data, $id)) {
+        $updateUser = User::findOrFail($id)->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ]);
+
+        if ($updateUser) {
             return redirect()->route('admin.users')->with('success', 'User updated successfully');
         } else {
             return redirect()->route('admin.users')->with('error', 'User update failed');
@@ -95,7 +100,7 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        if ($this->users->deleteUser($id)) {
+        if (User::findOrFail($id)->delete()) {
             return redirect()->route('admin.users')->with('success', 'User deleted successfully');
         } else {
             return redirect()->route('admin.users')->with('error', 'User deletion failed');

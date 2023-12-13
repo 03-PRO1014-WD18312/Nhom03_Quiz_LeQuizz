@@ -5,19 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Admin\Exams;
-use App\Models\Admin\Subjects;
+use App\Models\Exams;
+use App\Models\Subjects;
 
 class HomeController extends Controller
 {
-    private $subjects;
-    private $exams;
-
-    public function __construct()
-    {
-        $this->subjects = new Subjects();
-        $this->exams = new Exams();
-    }
 
     public function index()
     {
