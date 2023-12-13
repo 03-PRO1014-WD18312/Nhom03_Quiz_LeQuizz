@@ -5,23 +5,14 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Client\Subjects;
+use App\Models\Subjects;
 
 class HomeController extends Controller
 {
-    private $subjects;
-
-    public function __construct()
-    {
-        $this->subjects = new Subjects();
-    }
-
     public function index()
     {
-        $listSubjects = $this->subjects->getAllSubjects();
+        $listSubjects = Subjects::all();
 
-        $token = csrf_token();
-
-        return view('clients.home', compact('listSubjects', 'token'));
+        return view('clients.home', compact('listSubjects'));
     }
 }

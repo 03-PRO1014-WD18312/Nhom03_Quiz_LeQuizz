@@ -44,10 +44,11 @@
 
                 <div class="mb-3">
                     <label for="subject" class="form-label">Subject</label>
-                    <input type="hidden" class="form-control" id="subject" name="subject" value="{{ $getSubject->id }}">
-
-                    <input type="text" class="form-control" id="subject" name="subject" value="{{ $getSubject->name }}"
-                        disabled>
+                    <select class="form-select" name="subject">
+                        @foreach ($listSubjects as $subject)
+                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update</button>

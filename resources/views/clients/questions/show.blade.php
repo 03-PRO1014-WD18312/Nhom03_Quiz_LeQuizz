@@ -4,76 +4,85 @@
     Do Test
 @endsection
 
+@section('css')
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         @if (session('msg'))
             <div class="alert alert-success">{{ session('msg') }}</div>
         @endif
 
-        @foreach ($getExam as $exam)
-            <h2 class="text-center pt-4 pb-2 mb-3">{{ $exam->name }}</h2>
-            @php
-                $index = 1;
-            @endphp
+        <h2 class="text-center pt-4 pb-2 mb-3">{{ $getExam->name }}</h2>
+        @php
+            $index = 1;
+        @endphp
 
 
-            <form id="form-questions" action="{{ route('questions.complete', [$exam->id, Auth::user()]) }}" method="post">
-                @csrf
+        <form id="form-questions" action="{{ route('questions.complete', [$getExam->id, Auth::user()]) }}" method="post">
+            @csrf
 
-                <div class="row">
-                    <div class="col-6">
-                        @foreach ($listQuestions as $question)
-                            @if ($exam->id == $question->exam_id)
-                                <div class="col-md-12">
-                                    <p><span class="fw-bold">Question {{ $index++ }}: {{ $question->name }}</span>
-                                    </p>
+            <div class="row">
+                <div class="col-6">
+                    @foreach ($listQuestions as $question)
+                        @if ($getExam->id == $question->exam_id)
+                            <div class="col-md-12">
+                                <p><span class="fw-bold">Question {{ $index++ }}: {{ $question->name }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
+                                        id="choice{{ $question->id }}_1" value="A">
+                                    <label class="form-check-label" for="choice{{ $question->id }}_1">
+                                        {{ $question->option_a }}
+                                    </label>
                                 </div>
 
-                                <div class="col-md-12 mb-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
-                                            id="choice{{ $question->id }}_1" value="A">
-                                        <label class="form-check-label" for="choice{{ $question->id }}_1">
-                                            {{ $question->option_a }}
-                                        </label>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
-                                            id="choice{{ $question->id }}_2" value="B">
-                                        <label class="form-check-label" for="choice{{ $question->id }}_2">
-                                            {{ $question->option_b }}
-                                        </label>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
-                                            id="choice{{ $question->id }}_3" value="C">
-                                        <label class="form-check-label" for="choice{{ $question->id }}_3">
-                                            {{ $question->option_c }}
-                                        </label>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
-                                            id="choice{{ $question->id }}_4" value="D">
-                                        <label class="form-check-label" for="choice{{ $question->id }}_4">
-                                            {{ $question->option_d }}
-                                        </label>
-                                    </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
+                                        id="choice{{ $question->id }}_2" value="B">
+                                    <label class="form-check-label" for="choice{{ $question->id }}_2">
+                                        {{ $question->option_b }}
+                                    </label>
                                 </div>
-                            @endif
-                        @endforeach
-                    </div>
 
-                    <div class="col-6">
-                        <h1 id="timer"></h1>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
+                                        id="choice{{ $question->id }}_3" value="C">
+                                    <label class="form-check-label" for="choice{{ $question->id }}_3">
+                                        {{ $question->option_c }}
+                                    </label>
+                                </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
+                                        id="choice{{ $question->id }}_4" value="D">
+                                    <label class="form-check-label" for="choice{{ $question->id }}_4">
+                                        {{ $question->option_d }}
+                                    </label>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
-            </form>
-        @endforeach
+
+                <div class="col-6">
+                    <h1 id="timer"></h1>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 
@@ -194,10 +203,26 @@
             }
         }
 
+        history.pushState(null, null, document.URL);
+
+        window.addEventListener('popstate', function() {
+            history.pushState(null, null, document.URL);
+        });
+
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.querySelector('body').addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || e.key === 'f12') {
+                e.preventDefault();
+            }
+        });
+
         document.querySelector('#form-questions').addEventListener('submit', function(event) {
+            localStorage.removeItem('answers');
             localStorage.removeItem('countdown_' + window.location.href + '_minutes');
             localStorage.removeItem('countdown_' + window.location.href + '_seconds');
-            localStorage.removeItem('answers');
         });
     </script>
 @endpush

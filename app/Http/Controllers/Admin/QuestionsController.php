@@ -5,22 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Admin\Subjects;
-use App\Models\Admin\Exams;
-use App\Models\Admin\Questions;
+use App\Models\Subjects;
+use App\Models\Exams;
+use App\Models\Questions;
 
 class QuestionsController extends Controller
 {
-    private $subjects;
-    private $exams;
-    private $questions;
-
-    public function __construct()
-    {
-        $this->subjects = new Subjects();
-        $this->exams = new Exams();
-        $this->questions = new Questions();
-    }
 
     /**
      * Display a listing of the resource.
@@ -29,11 +19,11 @@ class QuestionsController extends Controller
     {
         $search = $request->input('exam');
 
-        $listExams = $this->exams->getAllExams();
+        $listExams = Exams::all();
 
-        $listSubjects = $this->subjects->getAllSubjects();
+        $listSubjects = Subjects::all();
 
-        $listQuestions = $this->questions->getAllQuestions();
+        $listQuestions = Questions::all();
 
         return view('admin.questions.lists', compact('listExams', 'listSubjects', 'listQuestions', 'search'));
     }
@@ -43,14 +33,14 @@ class QuestionsController extends Controller
      */
     public function create(Request $request)
     {
-        $listExams = $this->exams->getAllExams();
+        $listExams = Exams::all();
 
         return view('admin.questions.create', compact('listExams'));
     }
 
     public function createByExam(string $id)
     {
-        $getExam = $this->exams->getExamById($id);
+        $getExam = Exams::findOrFail($id);
 
         return view('admin.questions.createByExam', compact('getExam'));
     }
@@ -62,7 +52,17 @@ class QuestionsController extends Controller
     {
         $data = $request->all();
 
-        if ($this->questions->createQuestion($data)) {
+        $insertQuestion = Questions::insert([
+            'name' => $data['question'],
+            'option_a' => $data['choice1'],
+            'option_b' => $data['choice2'],
+            'option_c' => $data['choice3'],
+            'option_d' => $data['choice4'],
+            'correct_answer' => $data['correct'],
+            'exam_id' => $data['exam'],
+        ]);
+
+        if ($insertQuestion) {
             return redirect()->route('admin.questions')->with('success', 'Question created successfully');
         } else {
             return redirect()->route('admin.questions')->with('error', 'Question created failed');
@@ -73,7 +73,17 @@ class QuestionsController extends Controller
     {
         $data = $request->all();
 
-        if ($this->questions->createQuestion($data)) {
+        $insertQuestionByExam = Questions::insert([
+            'name' => $data['question'],
+            'option_a' => $data['choice1'],
+            'option_b' => $data['choice2'],
+            'option_c' => $data['choice3'],
+            'option_d' => $data['choice4'],
+            'correct_answer' => $data['correct'],
+            'exam_id' => $id,
+        ]);
+
+        if ($insertQuestionByExam) {
             return redirect()->route('admin.exams.show', $id)->with('success', 'Question created successfully');
         } else {
             return redirect()->route('admin.exams.show', $id)->with('error', 'Question created failed');
@@ -85,7 +95,7 @@ class QuestionsController extends Controller
      */
     public function show(string $id)
     {
-        $getQuestion = $this->questions->getQuestionById($id);
+        $getQuestion = Questions::findOrFail($id);
 
         return view('admin.questions.show', compact('getQuestion'));
     }
@@ -97,9 +107,9 @@ class QuestionsController extends Controller
     {
         $request->session()->put('id_question', $id);
 
-        $getQuestion = $this->questions->getQuestionById($id);
+        $getQuestion = Questions::findOrFail($id);
 
-        $listExams = $this->exams->getAllExams();
+        $listExams = Exams::all();
 
         return view('admin.questions.edit', compact('getQuestion', 'listExams'));
     }
@@ -108,9 +118,9 @@ class QuestionsController extends Controller
     {
         $request->session()->put('id_question', $id);
 
-        $getQuestion = $this->questions->getQuestionById($id);
+        $getQuestion = Questions::findOrFail($id);
 
-        $listExams = $this->exams->getAllExams();
+        $listExams = Exams::all();
 
         return view('admin.questions.editByExam', compact('getQuestion', 'listExams'));
     }
@@ -123,7 +133,17 @@ class QuestionsController extends Controller
         $id = session('id_question');
         $data = $request->all();
 
-        if ($this->questions->updateQuestion($data, $id)) {
+        $updateQuestion = Questions::findOrFail($id)->update([
+            'name' => $data['question'],
+            'option_a' => $data['choice1'],
+            'option_b' => $data['choice2'],
+            'option_c' => $data['choice3'],
+            'option_d' => $data['choice4'],
+            'correct_answer' => $data['correct'],
+            'exam_id' => $data['exam'],
+        ]);
+
+        if ($updateQuestion) {
             return redirect()->route('admin.questions')->with('success', 'Question updated successfully');
         } else {
             return redirect()->route('admin.questions')->with('error', 'Question updated failed');
@@ -135,7 +155,17 @@ class QuestionsController extends Controller
         $id = session('id_question');
         $data = $request->all();
 
-        if ($this->questions->updateQuestion($data, $id)) {
+        $updateQuestionByExam = Questions::findOrFail($id)->update([
+            'name' => $data['question'],
+            'option_a' => $data['choice1'],
+            'option_b' => $data['choice2'],
+            'option_c' => $data['choice3'],
+            'option_d' => $data['choice4'],
+            'correct_answer' => $data['correct'],
+            'exam_id' => $data['exam'],
+        ]);
+
+        if ($updateQuestionByExam) {
             return redirect()->route('admin.exams.show', [$data['exam']])->with('success', 'Question updated successfully');
         } else {
             return redirect()->route('admin.exams.show', [$data['exam']])->with('error', 'Question updated failed');
@@ -147,7 +177,7 @@ class QuestionsController extends Controller
      */
     public function destroy(string $id)
     {
-        if ($this->questions->deleteQuestion($id)) {
+        if (Questions::findOrFail($id)->delete()) {
             return redirect()->route('admin.questions')->with('success', 'Question deleted successfully');
         } else {
             return redirect()->route('admin.questions')->with('error', 'Question deleted failed');
@@ -157,7 +187,7 @@ class QuestionsController extends Controller
     public function destroyByExam(string $id)
     {
 
-        if ($this->questions->deleteQuestion($id)) {
+        if (Questions::findOrFail($id)->delete()) {
             return redirect()->back()->with('success', 'Question deleted successfully');
         } else {
             return redirect()->back()->with('error', 'Question deleted failed');
