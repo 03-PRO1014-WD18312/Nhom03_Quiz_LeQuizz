@@ -10,12 +10,15 @@ use App\Models\Subjects;
 use App\Models\Exams;
 use App\Models\User;
 use App\Models\UsersSubjects;
+use App\Models\UsersExams;
 
 class SubjectsController extends Controller
 {
     public function index()
     {
-        return view('client.subjects.lists');
+        $listSubjects = Subjects::all();
+
+        return view('clients.subjects.lists', compact('listSubjects'));
     }
 
     public function show(string $id)
@@ -25,6 +28,8 @@ class SubjectsController extends Controller
         $listExams = Exams::all();
 
         $checkRegister = $this->checkRegisterSubject($id);
+
+        $getExam = Exams::where('subject_id', $id)->first();
 
         return view('clients.subjects.show', compact('getSubject', 'listExams', 'checkRegister'));
     }

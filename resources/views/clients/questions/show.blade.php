@@ -41,6 +41,11 @@
 
                             <div class="col-md-12 mb-4">
                                 <div class="form-check">
+                                    <input class="form-check-input" type="hidden" name="answers[{{ $question->id }}]"
+                                        id="choice{{ $question->id }}_4" value="E">
+                                </div>
+
+                                <div class="form-check">
                                     <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
                                         id="choice{{ $question->id }}_1" value="A">
                                     <label class="form-check-label" for="choice{{ $question->id }}_1">
@@ -165,7 +170,6 @@
         let inputs = form.querySelectorAll('input[type="radio"]');
         let answers = localStorage.getItem('answers') == null ? [] : localStorage.getItem('answers');
 
-        // Kiểm tra xem localStorage có khả dụng không
         if (typeof localStorage !== 'undefined') {
             // JavaScript add data to local storage
             for (let i = 0; i < inputs.length; i++) {
@@ -181,13 +185,12 @@
                     }
 
                     answers.push(obj)
-                    // Cập nhật local storage khi có sự thay đổi cụ thể
+
                     localStorage.setItem('answers', JSON.stringify(answers));
                 });
             }
 
             // JavaScript get data from local storage
-
             if (answers.length > 0) {
                 answers = JSON.parse(answers);
 

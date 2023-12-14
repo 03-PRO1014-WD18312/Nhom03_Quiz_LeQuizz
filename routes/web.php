@@ -138,6 +138,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
             Route::get('/result/{examId}/{userId}', [ClientQuestionsController::class, 'result'])->name('questions.result');
         });
+
+        Route::prefix('info')->group(function () {
+            Route::get('/{id}', [ClientHomeController::class, 'score'])->name('info.score');
+        });
     });
 
     Route::fallback(function () {
