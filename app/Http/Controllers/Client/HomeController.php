@@ -11,6 +11,7 @@ use App\Models\UsersExams;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -80,6 +81,22 @@ class HomeController extends Controller
             return redirect()->route('info.dashboard', $id)->with('success', 'Cập nhật thông tin thành công');
         } else {
             return redirect()->route('info.dashboard', $id)->with('error', 'Cập nhật thông tin thất bại');
+        }
+    }
+
+    public function registeredSubjects()
+    {
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+
+            $listSubjects = Subjects::join('users_subjects', 'subjects.id', '=', 'users_subjects.subject_id')
+                ->where('users_subjects.user_id', $user_id)
+                ->select('subjects.*')
+                ->get();
+
+            return view('clients.info.registered', compact('listSubjects'));
+        } else {
+            return redirect()->route('subjects')->with('error', 'Bạn cần đăng nhập để xem');
         }
     }
 }

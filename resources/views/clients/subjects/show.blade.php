@@ -82,7 +82,46 @@
                 @endif
             @endforeach
         </div>
-    </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h3>Comments</h3>
+                <hr>
+
+                @if (Auth::check())
+                    <form action="{{ route('subjects.comment', [$getSubject->id, Auth::user()->id]) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" name="content"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Comment</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary">Comment</a>
+                @endif
+            </div>
+
+            @forelse ($listComments as $comment)
+                <div class="col-md-12 mt-4">
+                    <h5 class="card-title">
+                        @if ($getUser->id == $comment->user_id)
+                            @if ($getUser->role == 1)
+                                {{ $getUser->name }} <span class="badge bg-success">Admin</span>
+                            @else
+                                {{ $getUser->name }} <span class="badge bg-primary">User</span>
+                            @endif
+                        @endif
+                    </h5>
+                    <p class="card-text">{{ $comment->text }}</p>
+                </div>
+            @empty
+                <div class="col-md-12 mt-4">
+                    <p>No comments available.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 @endsection
 

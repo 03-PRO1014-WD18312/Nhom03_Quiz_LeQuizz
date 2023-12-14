@@ -125,6 +125,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
             Route::middleware('auth')->post('/{id}', [ClientSubjectsController::class, 'registerSubject'])->name('subjects.register');
 
             Route::middleware('auth')->delete('/{id}', [ClientSubjectsController::class, 'unregisterSubject'])->name('subjects.unregister');
+
+            Route::middleware('auth')->post('/{subject_id}/{user_id}/comment', [ClientSubjectsController::class, 'comment'])->name('subjects.comment');
         });
 
         Route::prefix('questions')->group(function () {
@@ -141,6 +143,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::prefix('info')->group(function () {
             Route::get('/{id}', [ClientHomeController::class, 'score'])->name('info.score');
+
+            Route::get('/{id}/subjects', [ClientHomeController::class, 'registeredSubjects'])->name('info.registered');
 
             Route::get('/{id}/dashboard', [ClientHomeController::class, 'dashboard'])->name('info.dashboard');
 
