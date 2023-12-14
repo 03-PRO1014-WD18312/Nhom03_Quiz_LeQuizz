@@ -141,6 +141,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::prefix('info')->group(function () {
             Route::get('/{id}', [ClientHomeController::class, 'score'])->name('info.score');
+
+            Route::get('/{id}/dashboard', [ClientHomeController::class, 'dashboard'])->name('info.dashboard');
+
+            Route::put('/update', [ClientHomeController::class, 'update'])->name('info.update');
         });
     });
 

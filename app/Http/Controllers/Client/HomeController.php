@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\Exams;
 use App\Models\Subjects;
 use App\Models\UsersExams;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -29,5 +32,54 @@ class HomeController extends Controller
             ->get();
 
         return view('clients.info.score', compact('listExams', 'usersExams'));
+    }
+
+    public function dashboard(Request $request, string $id)
+    {
+        $request->session()->put('user_id', $id);
+
+        $user = User::find($id);
+
+        return view('clients.info.dashboard', compact('user'));
+    }
+
+    public function update(Request $request)
+    {
+        $id = session('user_id');
+        $data = $request->all();
+
+        $user = User::find($id);
+
+        $hashedPassword = Hash::make($data['new_password']);
+
+        if (!Hash::check($data['old_password'], $user->password)) {
+            return redirect()->route('info.dashboard', $id)->with('error', 'Mật khẩu cũ không đúng');
+        }
+
+        $request->validate([
+            'name' => 'required',
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|not_in:' . $data['old_password'],
+            'confirm_password' => 'required|same:new_password',
+        ], [
+            'name.required' => 'Tên không được để trống',
+            'old_password.required' => 'Mật khẩu cũ không được để trống',
+            'new_password.required' => 'Mật khẩu mới không được để trống',
+            'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự',
+            'new_password.not_in' => 'Mật khẩu mới không được trùng với mật khẩu cũ',
+            'confirm_password.required' => 'Xác nhận mật khẩu không được để trống',
+            'confirm_password.same' => 'Xác nhận mật khẩu không khớp',
+        ]);
+
+        $updateUser = $user->update([
+            'name' => $data['name'],
+            'password' => $hashedPassword,
+        ]);
+
+        if ($updateUser) {
+            return redirect()->route('info.dashboard', $id)->with('success', 'Cập nhật thông tin thành công');
+        } else {
+            return redirect()->route('info.dashboard', $id)->with('error', 'Cập nhật thông tin thất bại');
+        }
     }
 }

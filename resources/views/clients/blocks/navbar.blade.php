@@ -56,6 +56,8 @@
                                 <a class="dropdown-item" href="{{ route('admin.home') }}">Admin pages</a>
                             @else
                                 <a class="dropdown-item" href="{{ route('info.score', Auth::user()->id) }}">Score</a>
+                                <a class="dropdown-item"
+                                    href="{{ route('info.dashboard', Auth::user()->id) }}">Dashboard</a>
                             @endif
 
                             <a class="dropdown-item" href="{{ route('logout') }}"
