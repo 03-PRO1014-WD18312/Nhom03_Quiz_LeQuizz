@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('time_limit');
             $table->integer('number_of_questions');
-            $table->string('description');
+            $table->text('description');
         });
     }
 
